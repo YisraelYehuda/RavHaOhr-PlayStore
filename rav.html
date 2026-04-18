@@ -1486,43 +1486,29 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// ─── AUTH SIMULATION ─────────────────────────
-// Replace these with real Firebase / Google auth in production
+// ─── AUTH — FIREBASE REAL ────────────────────
+// Funções chamadas pelos botões HTML (definidas antes do módulo carregar,
+// depois sobrescritas pelo módulo Firebase abaixo)
+window.loginWithGoogle  = () => console.warn('Firebase ainda carregando...');
+window.loginWithEmail   = () => console.warn('Firebase ainda carregando...');
+window.registerWithEmail= () => console.warn('Firebase ainda carregando...');
+window.logout           = () => console.warn('Firebase ainda carregando...');
 
-function loginWithGoogle() {
-  // TODO: integrate Firebase Google Auth
-  simulateLogin('Buscador da Luz', 'google');
-}
-
-function loginWithEmail() {
-  const email = document.getElementById('email-input').value.trim();
-  const pass  = document.getElementById('pass-input').value.trim();
-  if (!email || !pass) { alert('Por favor, preencha e-mail e senha.'); return; }
-  // TODO: Firebase signInWithEmailAndPassword
-  simulateLogin(email.split('@')[0], 'email');
-}
-
-function registerWithEmail() {
-  const name  = document.getElementById('name-input').value.trim();
-  const email = document.getElementById('reg-email-input').value.trim();
-  const pass  = document.getElementById('reg-pass-input').value.trim();
-  if (!name || !email || !pass) { alert('Por favor, preencha todos os campos.'); return; }
-  // TODO: Firebase createUserWithEmailAndPassword
-  simulateLogin(name, 'email');
-}
-
-function simulateLogin(displayName, method) {
-  currentUser = { displayName, method };
+function onUserLoggedIn(user) {
+  currentUser = user;
+  const name = user.displayName || user.email.split('@')[0];
   document.getElementById('login').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
-  // Greet with user name in welcome
   const wb = document.querySelector('.wb-greeting');
   if (wb) {
-    wb.innerHTML = `Shalom, <strong>${displayName}</strong>.<br>Que a luz da Torá ilumine cada palavra que trocarmos.<br>Estou aqui para guiá-lo com sabedoria, amor e verdade.`;
+    wb.innerHTML = `Shalom, <strong>${name}</strong>.<br>Que a luz da Torá ilumine cada palavra que trocarmos.<br>Estou aqui para guiá-lo com sabedoria, amor e verdade.`;
   }
+  // Mostra email no header se quiser
+  const clockEl = document.getElementById('live-clock');
+  // (clock continua normalmente)
 }
 
-function logout() {
+function onUserLoggedOut() {
   currentUser = null;
   conversationHistory = [];
   document.getElementById('app').classList.add('hidden');
@@ -1706,6 +1692,117 @@ function scrollToBottom() {
     });
   });
 })();
+</script>
+
+<!-- ═══════════════════════════════════════════
+     FIREBASE AUTH MODULE
+     ✏️  Preencha apiKey e appId com os seus valores do Firebase Console
+═══════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  // ─────────────────────────────────────────────────────────────────
+  // ✏️  SUBSTITUA os valores abaixo pelos do seu projeto no Firebase Console
+  //     Firebase Console → Configurações do projeto → Seus apps → Config SDK
+  // ─────────────────────────────────────────────────────────────────
+  const firebaseConfig = {
+    apiKey:            "AIzaSyCbFI4xgkHCw8eY8JRcpOrokOyBpxzDhk0",           // ← substituir
+    authDomain:        "ravhaohr.firebaseapp.com",
+    projectId:         "ravhaohr",
+    storageBucket:     "ravhaohr.firebasestorage.app",
+    messagingSenderId: "919621617899",
+    appId:             "1:919621617899:web:f3cc2ac7ac4fc87d9856ae"             // ← substituir
+  };
+
+  const app      = initializeApp(firebaseConfig);
+  const auth     = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // ── Observador de estado — detecta login/logout automaticamente ──
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("✅ Logado:", user.email);
+      window.onUserLoggedIn(user);
+    } else {
+      console.log("🔒 Deslogado");
+      window.onUserLoggedOut();
+    }
+  });
+
+  // ── Google ────────────────────────────────────────────────────────
+  window.loginWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+      // onAuthStateChanged cuida do resto
+    } catch (e) {
+      console.error(e);
+      if (e.code !== 'auth/popup-closed-by-user') {
+        alert("Erro ao entrar com Google. Tente novamente.");
+      }
+    }
+  };
+
+  // ── E-mail / senha — login ────────────────────────────────────────
+  window.loginWithEmail = async () => {
+    const email = document.getElementById('email-input').value.trim();
+    const pass  = document.getElementById('pass-input').value.trim();
+    if (!email || !pass) { alert('Preencha e-mail e senha.'); return; }
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+    } catch (e) {
+      console.error(e);
+      const msgs = {
+        'auth/user-not-found':  'E-mail não encontrado.',
+        'auth/wrong-password':  'Senha incorreta.',
+        'auth/invalid-email':   'E-mail inválido.',
+        'auth/invalid-credential': 'Credenciais inválidas. Verifique e-mail e senha.'
+      };
+      alert(msgs[e.code] || 'Erro no login: ' + e.message);
+    }
+  };
+
+  // ── E-mail / senha — cadastro ─────────────────────────────────────
+  window.registerWithEmail = async () => {
+    const name  = document.getElementById('name-input').value.trim();
+    const email = document.getElementById('reg-email-input').value.trim();
+    const pass  = document.getElementById('reg-pass-input').value.trim();
+    if (!name || !email || !pass) { alert('Preencha todos os campos.'); return; }
+    if (pass.length < 6) { alert('A senha deve ter no mínimo 6 caracteres.'); return; }
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      // Força atualização do displayName no onAuthStateChanged
+      window.onUserLoggedIn({ ...cred.user, displayName: name });
+    } catch (e) {
+      console.error(e);
+      const msgs = {
+        'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
+        'auth/invalid-email':        'E-mail inválido.',
+        'auth/weak-password':        'Senha fraca. Use ao menos 6 caracteres.'
+      };
+      alert(msgs[e.code] || 'Erro no cadastro: ' + e.message);
+    }
+  };
+
+  // ── Logout ────────────────────────────────────────────────────────
+  window.logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 </script>
 </body>
 </html>
