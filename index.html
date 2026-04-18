@@ -6,65 +6,46 @@
   <title>Rav HaOhr — Login</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --card:#111a2e;
-      --line:#223354;
-      --text:#eaf1ff;
-      --muted:#9cb0d8;
-      --accent:#2563eb;
-      --accent2:#1d4ed8;
+      --bg:#07111f;
+      --bg2:#0d1b31;
+      --card:rgba(13,27,49,.92);
+      --line:rgba(86,125,194,.28);
+      --text:#edf4ff;
+      --muted:#9eb2d8;
+      --accent:#2f6df6;
+      --accent2:#1f52c7;
+      --gold:#d9b24c;
       --ok:#22c55e;
-      --danger:#ef4444;
-      --gold:#d4af37;
+      --err:#ef4444;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       min-height:100vh;
       font-family:Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(37,99,235,.18), transparent 35%),
-        linear-gradient(180deg, #08101d 0%, #0b1220 100%);
       color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(47,109,246,.2), transparent 35%),
+        linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
       display:flex;
       align-items:center;
       justify-content:center;
       padding:18px;
     }
-    .wrap{
-      width:100%;
-      max-width:430px;
-    }
     .card{
-      background:rgba(17,26,46,.94);
+      width:100%;
+      max-width:460px;
+      background:var(--card);
       border:1px solid var(--line);
-      border-radius:22px;
-      padding:26px 20px 20px;
-      box-shadow:0 18px 60px rgba(0,0,0,.45);
+      border-radius:24px;
+      padding:28px 20px 22px;
+      box-shadow:0 24px 60px rgba(0,0,0,.42);
       backdrop-filter: blur(10px);
     }
-    .logo{
-      text-align:center;
-      margin-bottom:20px;
-    }
-    .logo .he{
-      font-size:2rem;
-      font-weight:700;
-      color:var(--gold);
-      margin-bottom:4px;
-    }
-    .logo .pt{
-      font-size:1.15rem;
-      font-weight:700;
-      letter-spacing:.04em;
-    }
-    .sub{
-      text-align:center;
-      color:var(--muted);
-      font-size:.96rem;
-      line-height:1.45;
-      margin-bottom:20px;
-    }
+    .logo{text-align:center;margin-bottom:16px}
+    .logo-he{font-size:2rem;font-weight:700;color:var(--gold);margin-bottom:4px}
+    .logo-pt{font-size:1.2rem;font-weight:700;letter-spacing:.04em}
+    .sub{text-align:center;color:var(--muted);line-height:1.5;margin-bottom:18px}
     .btn{
       width:100%;
       border:none;
@@ -76,165 +57,82 @@
       transition:.2s ease;
     }
     .btn:hover{transform:translateY(-1px)}
-    .btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
     .btn-google{
-      background:#fff;
-      color:#111827;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
+      background:#fff;color:#111827;
+      display:flex;align-items:center;justify-content:center;gap:10px;
       margin-bottom:16px;
     }
-    .btn-primary{
-      background:linear-gradient(180deg,var(--accent),var(--accent2));
-      color:#fff;
-    }
-    .btn-secondary{
-      background:transparent;
-      color:var(--muted);
-      border:1px solid var(--line);
-      margin-top:12px;
-    }
+    .btn-primary{background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fff}
     .sep{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin:18px 0 16px;
-      color:var(--muted);
-      font-size:.85rem;
+      display:flex;align-items:center;gap:10px;
+      margin:16px 0;color:var(--muted);font-size:.88rem;
     }
-    .sep::before,.sep::after{
-      content:"";
-      flex:1;
-      height:1px;
-      background:var(--line);
-    }
-    .field{
-      margin-bottom:12px;
-    }
-    .field label{
-      display:block;
-      margin-bottom:6px;
-      font-size:.9rem;
-      color:var(--muted);
-    }
+    .sep:before,.sep:after{content:"";flex:1;height:1px;background:var(--line)}
+    .field{margin-bottom:12px}
+    .field label{display:block;color:var(--muted);font-size:.9rem;margin-bottom:6px}
     .field input{
-      width:100%;
-      border:1px solid var(--line);
-      background:#0b1324;
-      color:var(--text);
-      border-radius:12px;
-      padding:13px 14px;
-      font-size:1rem;
-      outline:none;
+      width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);
+      background:#0a1527;color:var(--text);font-size:1rem;outline:none;
     }
-    .field input:focus{
-      border-color:#3b82f6;
-      box-shadow:0 0 0 3px rgba(59,130,246,.15);
-    }
-    .row{
-      display:flex;
-      gap:10px;
-    }
-    .row > *{flex:1}
-    .toggle{
-      margin-top:14px;
-      text-align:center;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-    .toggle a{
-      color:#8ab4ff;
-      text-decoration:none;
-      font-weight:700;
-      cursor:pointer;
-    }
-    .status{
-      margin-top:14px;
-      min-height:22px;
-      text-align:center;
-      font-size:.92rem;
-      color:var(--muted);
-      word-break:break-word;
-    }
+    .field input:focus{border-color:#4c88ff;box-shadow:0 0 0 3px rgba(76,136,255,.14)}
+    .toggle{text-align:center;color:var(--muted);font-size:.92rem;margin-top:12px}
+    .toggle a{color:#8bb4ff;text-decoration:none;font-weight:700;cursor:pointer}
+    .status{min-height:22px;text-align:center;font-size:.92rem;margin-top:14px;color:var(--muted)}
     .status.ok{color:var(--ok)}
-    .status.err{color:var(--danger)}
-    .loading{
-      display:none;
-      text-align:center;
-      margin-top:12px;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-    .version{
-      text-align:center;
-      margin-top:16px;
-      color:#7284a8;
-      font-size:.78rem;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
+    .status.err{color:var(--err)}
     .hidden{display:none}
+    .version{text-align:center;margin-top:16px;color:#788cb2;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="logo">
-        <div class="he">רַב הָאוֹר</div>
-        <div class="pt">Rav HaOhr</div>
-      </div>
-
-      <div class="sub">
-        Entre com sua conta para acessar o Rav e continuar sua jornada de estudo.
-      </div>
-
-      <button id="googleBtn" class="btn btn-google" onclick="loginGoogle()">
-        <span>🔐</span>
-        <span>Entrar com Google</span>
-      </button>
-
-      <div class="sep">ou</div>
-
-      <div id="loginBox">
-        <div class="field">
-          <label for="email">E-mail</label>
-          <input id="email" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="password">Senha</label>
-          <input id="password" type="password" placeholder="Digite sua senha" autocomplete="current-password">
-        </div>
-        <button id="loginBtn" class="btn btn-primary" onclick="loginEmail()">Entrar com e-mail</button>
-        <div class="toggle">
-          Ainda não tem conta? <a onclick="showRegister()">Criar conta</a>
-        </div>
-      </div>
-
-      <div id="registerBox" class="hidden">
-        <div class="field">
-          <label for="name">Nome</label>
-          <input id="name" type="text" placeholder="Seu nome">
-        </div>
-        <div class="field">
-          <label for="regEmail">E-mail</label>
-          <input id="regEmail" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="regPassword">Senha</label>
-          <input id="regPassword" type="password" placeholder="Crie uma senha (mín. 6)" autocomplete="new-password">
-        </div>
-        <button id="registerBtn" class="btn btn-primary" onclick="registerEmail()">Criar conta</button>
-        <div class="toggle">
-          Já tem conta? <a onclick="showLogin()">Entrar</a>
-        </div>
-      </div>
-
-      <div id="loading" class="loading">Conectando ao Firebase…</div>
-      <div id="status" class="status">Aguardando autenticação…</div>
-      <div class="version">Rav HaOhr · Login Firebase · Cloudflare Pages</div>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-he">רַב הָאוֹר</div>
+      <div class="logo-pt">Rav HaOhr</div>
     </div>
+    <div class="sub">
+      Faça login para entrar no Rav e acessar a área protegida.
+    </div>
+
+    <button class="btn btn-google" id="googleBtn" onclick="loginGoogle()">
+      <span>🔐</span><span>Entrar com Google</span>
+    </button>
+
+    <div class="sep">ou</div>
+
+    <div id="loginBox">
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input id="password" type="password" placeholder="Digite sua senha" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" id="emailLoginBtn" onclick="loginEmail()">Entrar com e-mail</button>
+      <div class="toggle">Ainda não tem conta? <a onclick="showRegister()">Criar conta</a></div>
+    </div>
+
+    <div id="registerBox" class="hidden">
+      <div class="field">
+        <label for="name">Nome</label>
+        <input id="name" type="text" placeholder="Seu nome">
+      </div>
+      <div class="field">
+        <label for="regEmail">E-mail</label>
+        <input id="regEmail" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="regPassword">Senha</label>
+        <input id="regPassword" type="password" placeholder="Crie uma senha (mínimo 6)" autocomplete="new-password">
+      </div>
+      <button class="btn btn-primary" id="registerBtn" onclick="registerEmail()">Criar conta</button>
+      <div class="toggle">Já tem conta? <a onclick="showLogin()">Entrar</a></div>
+    </div>
+
+    <div class="status" id="status">Aguardando autenticação…</div>
+    <div class="version">Cloudflare Pages · Firebase Auth</div>
   </div>
 
   <script type="module">
@@ -262,22 +160,27 @@
       measurementId: "G-E5HYDV7YN2"
     };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
     const statusEl = document.getElementById("status");
-    const loadingEl = document.getElementById("loading");
-    const googleBtn = document.getElementById("googleBtn");
-    const loginBtn = document.getElementById("loginBtn");
-    const registerBtn = document.getElementById("registerBtn");
+    const buttons = [
+      document.getElementById("googleBtn"),
+      document.getElementById("emailLoginBtn"),
+      document.getElementById("registerBtn")
+    ];
 
-    function setStatus(text, type=""){
+    function setStatus(text, kind=""){
       statusEl.textContent = text;
-      statusEl.className = "status" + (type ? " " + type : "");
+      statusEl.className = "status" + (kind ? " " + kind : "");
     }
-
-    function setLoading(isLoading){
-      loadingEl.style.display = isLoading ? "block" : "none";
-      googleBtn.disabled = isLoading;
-      loginBtn.disabled = isLoading;
-      registerBtn.disabled = isLoading;
+    function lockUI(locked){
+      buttons.forEach(btn => btn && (btn.disabled = locked));
+    }
+    function goToRav(){
+      window.location.href = "/rav";
     }
 
     window.showRegister = function(){
@@ -292,23 +195,11 @@
       setStatus("Entre com Google ou e-mail.");
     }
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-
-    await setPersistence(auth, browserLocalPersistence);
-
-    async function goToRav(){
-      setStatus("Login concluído. Entrando no Rav…", "ok");
-      window.location.href = "/rav";
-    }
-
-    async function handleAuthError(error){
+    function handleAuthError(error){
       console.error(error);
       const map = {
         "auth/unauthorized-domain": "Domínio não autorizado no Firebase.",
-        "auth/popup-blocked": "O navegador bloqueou o login. Tente novamente.",
+        "auth/popup-blocked": "O navegador bloqueou o login.",
         "auth/popup-closed-by-user": "O login foi fechado antes de terminar.",
         "auth/invalid-credential": "Credenciais inválidas.",
         "auth/user-not-found": "E-mail não encontrado.",
@@ -320,34 +211,34 @@
       setStatus(map[error.code] || ("Erro: " + (error.message || error.code)), "err");
     }
 
+    await setPersistence(auth, browserLocalPersistence);
+
     window.loginGoogle = async function(){
       try{
-        setLoading(true);
+        lockUI(true);
         setStatus("Abrindo autenticação Google…");
         await signInWithRedirect(auth, provider);
       }catch(error){
-        setLoading(false);
-        await handleAuthError(error);
+        lockUI(false);
+        handleAuthError(error);
       }
     }
 
     window.loginEmail = async function(){
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
-
       if(!email || !password){
         setStatus("Preencha e-mail e senha.", "err");
         return;
       }
-
       try{
-        setLoading(true);
+        lockUI(true);
         setStatus("Entrando com e-mail…");
         await signInWithEmailAndPassword(auth, email, password);
-        await goToRav();
+        goToRav();
       }catch(error){
-        setLoading(false);
-        await handleAuthError(error);
+        lockUI(false);
+        handleAuthError(error);
       }
     }
 
@@ -366,33 +257,34 @@
       }
 
       try{
-        setLoading(true);
+        lockUI(true);
         setStatus("Criando sua conta…");
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(cred.user, { displayName: name });
-        await goToRav();
+        goToRav();
       }catch(error){
-        setLoading(false);
-        await handleAuthError(error);
+        lockUI(false);
+        handleAuthError(error);
       }
     }
 
     try{
-      setLoading(true);
-      const redirectResult = await getRedirectResult(auth);
-      if (redirectResult?.user){
-        await goToRav();
+      lockUI(true);
+      const result = await getRedirectResult(auth);
+      if (result?.user){
+        setStatus("Login concluído. Entrando no Rav…", "ok");
+        goToRav();
       }
     }catch(error){
-      await handleAuthError(error);
+      handleAuthError(error);
     }finally{
-      setLoading(false);
+      lockUI(false);
     }
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if(user){
-        const who = user.displayName || user.email || "usuário";
-        setStatus("Sessão ativa: " + who, "ok");
+        setStatus("Sessão ativa. Entrando no Rav…", "ok");
+        goToRav();
       }else{
         setStatus("Entre com Google ou e-mail.");
       }
