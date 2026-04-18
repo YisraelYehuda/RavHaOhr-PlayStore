@@ -2,21 +2,20 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rav HaOhr — Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Rav HaOhr — Área Protegida</title>
   <style>
     :root{
       --bg:#07111f;
-      --bg2:#0d1b31;
-      --card:rgba(13,27,49,.92);
-      --line:rgba(86,125,194,.28);
-      --text:#edf4ff;
-      --muted:#9eb2d8;
+      --bg2:#0e1c33;
+      --card:#12203a;
+      --line:rgba(88,124,191,.26);
+      --text:#eaf2ff;
+      --muted:#9ab0d8;
       --accent:#2f6df6;
-      --accent2:#1f52c7;
+      --accent2:#1e52c7;
       --gold:#d9b24c;
       --ok:#22c55e;
-      --err:#ef4444;
     }
     *{box-sizing:border-box}
     body{
@@ -25,8 +24,11 @@
       font-family:Arial, Helvetica, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top, rgba(47,109,246,.2), transparent 35%),
+        radial-gradient(circle at top, rgba(47,109,246,.16), transparent 35%),
         linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+    }
+    .center{
+      min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -34,120 +36,191 @@
     }
     .card{
       width:100%;
-      max-width:460px;
-      background:var(--card);
+      max-width:700px;
+      background:rgba(18,32,58,.93);
       border:1px solid var(--line);
       border-radius:24px;
-      padding:28px 20px 22px;
       box-shadow:0 24px 60px rgba(0,0,0,.42);
-      backdrop-filter: blur(10px);
+      overflow:hidden;
     }
-    .logo{text-align:center;margin-bottom:16px}
-    .logo-he{font-size:2rem;font-weight:700;color:var(--gold);margin-bottom:4px}
-    .logo-pt{font-size:1.2rem;font-weight:700;letter-spacing:.04em}
-    .sub{text-align:center;color:var(--muted);line-height:1.5;margin-bottom:18px}
-    .btn{
-      width:100%;
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:rgba(7,17,31,.35);
+      gap:12px;
+    }
+    .brand .he{font-size:1.3rem;font-weight:700;color:var(--gold)}
+    .brand .pt{font-size:.95rem;color:var(--muted)}
+    .user{
+      text-align:right;
+      min-width:0;
+    }
+    .user .name{
+      font-weight:700;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      max-width:240px;
+    }
+    .user .email{
+      color:var(--muted);
+      font-size:.86rem;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      max-width:240px;
+    }
+    .logout{
       border:none;
-      border-radius:14px;
-      padding:14px 16px;
-      font-size:1rem;
+      border-radius:12px;
+      padding:10px 14px;
+      background:linear-gradient(180deg,var(--accent),var(--accent2));
+      color:#fff;
       font-weight:700;
       cursor:pointer;
-      transition:.2s ease;
     }
-    .btn:hover{transform:translateY(-1px)}
-    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-    .btn-google{
-      background:#fff;color:#111827;
-      display:flex;align-items:center;justify-content:center;gap:10px;
-      margin-bottom:16px;
+    .content{padding:24px 18px 20px}
+    .hero{
+      text-align:center;
+      margin-bottom:20px;
     }
-    .btn-primary{background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fff}
-    .sep{
-      display:flex;align-items:center;gap:10px;
-      margin:16px 0;color:var(--muted);font-size:.88rem;
+    .hero .shalom{
+      font-size:1.8rem;
+      color:var(--gold);
+      margin-bottom:8px;
     }
-    .sep:before,.sep:after{content:"";flex:1;height:1px;background:var(--line)}
-    .field{margin-bottom:12px}
-    .field label{display:block;color:var(--muted);font-size:.9rem;margin-bottom:6px}
-    .field input{
-      width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);
-      background:#0a1527;color:var(--text);font-size:1rem;outline:none;
+    .hero .text{
+      color:var(--muted);
+      line-height:1.6;
     }
-    .field input:focus{border-color:#4c88ff;box-shadow:0 0 0 3px rgba(76,136,255,.14)}
-    .toggle{text-align:center;color:var(--muted);font-size:.92rem;margin-top:12px}
-    .toggle a{color:#8bb4ff;text-decoration:none;font-weight:700;cursor:pointer}
-    .status{min-height:22px;text-align:center;font-size:.92rem;margin-top:14px;color:var(--muted)}
-    .status.ok{color:var(--ok)}
-    .status.err{color:var(--err)}
-    .hidden{display:none}
-    .version{text-align:center;margin-top:16px;color:#788cb2;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+    .chat{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(7,17,31,.35);
+      padding:18px;
+      min-height:320px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .msg{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 16px;
+      line-height:1.65;
+    }
+    .msg strong{color:var(--gold)}
+    .composer{
+      display:flex;
+      gap:10px;
+      align-items:flex-end;
+    }
+    .composer textarea{
+      flex:1;
+      min-height:52px;
+      max-height:140px;
+      resize:none;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#0b1527;
+      color:var(--text);
+      padding:13px 14px;
+      font-size:1rem;
+      outline:none;
+    }
+    .composer button{
+      border:none;
+      border-radius:16px;
+      padding:14px 16px;
+      background:linear-gradient(180deg,var(--accent),var(--accent2));
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .status{
+      text-align:center;
+      color:var(--muted);
+      margin-top:12px;
+      min-height:22px;
+      font-size:.92rem;
+    }
+    .loading-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:10px;
+      color:var(--muted);
+      text-align:center;
+      padding:20px;
+    }
+    .dotline{display:flex;gap:8px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.4s infinite ease-in-out}
+    .dot:nth-child(2){animation-delay:.2s}
+    .dot:nth-child(3){animation-delay:.4s}
+    @keyframes pulse{
+      0%,100%{opacity:.25;transform:scale(.85)}
+      50%{opacity:1;transform:scale(1.15)}
+    }
+    .hidden{display:none !important}
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="logo">
-      <div class="logo-he">רַב הָאוֹר</div>
-      <div class="logo-pt">Rav HaOhr</div>
+  <div id="loadingScreen" class="loading-screen">
+    <div style="font-size:2rem;color:#d9b24c;">רַב הָאוֹר</div>
+    <div>Verificando autenticação…</div>
+    <div class="dotline"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+
+  <div id="app" class="hidden center">
+    <div class="card">
+      <div class="top">
+        <div class="brand">
+          <div class="he">רַב הָאוֹר</div>
+          <div class="pt">Área protegida do Rav</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="user">
+            <div class="name" id="userName">Usuário</div>
+            <div class="email" id="userEmail">email</div>
+          </div>
+          <button class="logout" onclick="logoutRav()">Sair</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="hero">
+          <div class="shalom">שָׁלוֹם</div>
+          <div class="text">
+            Você entrou com autenticação real. Esta página só abre quando existe uma sessão válida.
+          </div>
+        </div>
+
+        <div class="chat">
+          <div class="msg">
+            <strong>Rav HaOhr:</strong><br>
+            Baruch HaBa. A autenticação foi confirmada com sucesso. Agora você pode continuar a integração da IA com mais segurança.
+          </div>
+
+          <div class="composer">
+            <textarea id="msg" placeholder="Escreva aqui sua mensagem ao Rav..."></textarea>
+            <button onclick="sendFake()">Enviar</button>
+          </div>
+        </div>
+
+        <div class="status" id="status">Login confirmado.</div>
+      </div>
     </div>
-    <div class="sub">
-      Faça login para entrar no Rav e acessar a área protegida.
-    </div>
-
-    <button class="btn btn-google" id="googleBtn" onclick="loginGoogle()">
-      <span>🔐</span><span>Entrar com Google</span>
-    </button>
-
-    <div class="sep">ou</div>
-
-    <div id="loginBox">
-      <div class="field">
-        <label for="email">E-mail</label>
-        <input id="email" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label for="password">Senha</label>
-        <input id="password" type="password" placeholder="Digite sua senha" autocomplete="current-password">
-      </div>
-      <button class="btn btn-primary" id="emailLoginBtn" onclick="loginEmail()">Entrar com e-mail</button>
-      <div class="toggle">Ainda não tem conta? <a onclick="showRegister()">Criar conta</a></div>
-    </div>
-
-    <div id="registerBox" class="hidden">
-      <div class="field">
-        <label for="name">Nome</label>
-        <input id="name" type="text" placeholder="Seu nome">
-      </div>
-      <div class="field">
-        <label for="regEmail">E-mail</label>
-        <input id="regEmail" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label for="regPassword">Senha</label>
-        <input id="regPassword" type="password" placeholder="Crie uma senha (mínimo 6)" autocomplete="new-password">
-      </div>
-      <button class="btn btn-primary" id="registerBtn" onclick="registerEmail()">Criar conta</button>
-      <div class="toggle">Já tem conta? <a onclick="showLogin()">Entrar</a></div>
-    </div>
-
-    <div class="status" id="status">Aguardando autenticação…</div>
-    <div class="version">Cloudflare Pages · Firebase Auth</div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
       getAuth,
-      GoogleAuthProvider,
-      signInWithRedirect,
-      getRedirectResult,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      updateProfile,
       onAuthStateChanged,
-      browserLocalPersistence,
-      setPersistence
+      signOut
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
@@ -162,133 +235,47 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
 
+    const loadingScreen = document.getElementById("loadingScreen");
+    const appEl = document.getElementById("app");
     const statusEl = document.getElementById("status");
-    const buttons = [
-      document.getElementById("googleBtn"),
-      document.getElementById("emailLoginBtn"),
-      document.getElementById("registerBtn")
-    ];
+    const userNameEl = document.getElementById("userName");
+    const userEmailEl = document.getElementById("userEmail");
 
-    function setStatus(text, kind=""){
-      statusEl.textContent = text;
-      statusEl.className = "status" + (kind ? " " + kind : "");
-    }
-    function lockUI(locked){
-      buttons.forEach(btn => btn && (btn.disabled = locked));
-    }
-    function goToRav(){
-      window.location.href = "/rav";
-    }
-
-    window.showRegister = function(){
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("registerBox").classList.remove("hidden");
-      setStatus("Crie sua conta para acessar o Rav.");
-    }
-
-    window.showLogin = function(){
-      document.getElementById("registerBox").classList.add("hidden");
-      document.getElementById("loginBox").classList.remove("hidden");
-      setStatus("Entre com Google ou e-mail.");
-    }
-
-    function handleAuthError(error){
-      console.error(error);
-      const map = {
-        "auth/unauthorized-domain": "Domínio não autorizado no Firebase.",
-        "auth/popup-blocked": "O navegador bloqueou o login.",
-        "auth/popup-closed-by-user": "O login foi fechado antes de terminar.",
-        "auth/invalid-credential": "Credenciais inválidas.",
-        "auth/user-not-found": "E-mail não encontrado.",
-        "auth/wrong-password": "Senha incorreta.",
-        "auth/email-already-in-use": "Este e-mail já está em uso.",
-        "auth/invalid-email": "E-mail inválido.",
-        "auth/weak-password": "Senha fraca. Use pelo menos 6 caracteres."
-      };
-      setStatus(map[error.code] || ("Erro: " + (error.message || error.code)), "err");
-    }
-
-    await setPersistence(auth, browserLocalPersistence);
-
-    window.loginGoogle = async function(){
-      try{
-        lockUI(true);
-        setStatus("Abrindo autenticação Google…");
-        await signInWithRedirect(auth, provider);
-      }catch(error){
-        lockUI(false);
-        handleAuthError(error);
-      }
-    }
-
-    window.loginEmail = async function(){
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      if(!email || !password){
-        setStatus("Preencha e-mail e senha.", "err");
-        return;
-      }
-      try{
-        lockUI(true);
-        setStatus("Entrando com e-mail…");
-        await signInWithEmailAndPassword(auth, email, password);
-        goToRav();
-      }catch(error){
-        lockUI(false);
-        handleAuthError(error);
-      }
-    }
-
-    window.registerEmail = async function(){
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
-      const password = document.getElementById("regPassword").value.trim();
-
-      if(!name || !email || !password){
-        setStatus("Preencha nome, e-mail e senha.", "err");
-        return;
-      }
-      if(password.length < 6){
-        setStatus("A senha precisa ter pelo menos 6 caracteres.", "err");
-        return;
-      }
-
-      try{
-        lockUI(true);
-        setStatus("Criando sua conta…");
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-        goToRav();
-      }catch(error){
-        lockUI(false);
-        handleAuthError(error);
-      }
-    }
-
-    try{
-      lockUI(true);
-      const result = await getRedirectResult(auth);
-      if (result?.user){
-        setStatus("Login concluído. Entrando no Rav…", "ok");
-        goToRav();
-      }
-    }catch(error){
-      handleAuthError(error);
-    }finally{
-      lockUI(false);
+    function showApp(user){
+      userNameEl.textContent = user.displayName || "Usuário";
+      userEmailEl.textContent = user.email || "";
+      loadingScreen.classList.add("hidden");
+      appEl.classList.remove("hidden");
+      statusEl.textContent = "Login confirmado para " + (user.email || "usuário");
     }
 
     onAuthStateChanged(auth, (user) => {
-      if(user){
-        setStatus("Sessão ativa. Entrando no Rav…", "ok");
-        goToRav();
-      }else{
-        setStatus("Entre com Google ou e-mail.");
+      if (!user){
+        window.location.href = "/";
+        return;
       }
+      showApp(user);
     });
+
+    window.logoutRav = async function(){
+      try{
+        await signOut(auth);
+      }catch(error){
+        console.error(error);
+      }
+      window.location.href = "/";
+    }
+
+    window.sendFake = function(){
+      const msg = document.getElementById("msg").value.trim();
+      if(!msg){
+        statusEl.textContent = "Digite uma mensagem primeiro.";
+        return;
+      }
+      statusEl.textContent = "Mensagem enviada localmente. A próxima etapa é conectar sua IA real.";
+      document.getElementById("msg").value = "";
+    }
   </script>
 </body>
 </html>
