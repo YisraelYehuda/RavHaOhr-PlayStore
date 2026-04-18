@@ -1,9 +1,90 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=rav.html">
-<title>RavHaOhr</title>
+  <meta charset="UTF-8">
+  <title>Rav HaOhr</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0f1a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #user-info {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #22c55e;
+    }
+  </style>
 </head>
-<body></body>
+
+<body>
+
+  <h1>Rav HaOhr 🔥</h1>
+
+  <button onclick="loginGoogle()">Entrar com Google</button>
+  <button onclick="logout()">Sair</button>
+
+  <p id="user-info">Não logado</p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithPopup, 
+      GoogleAuthProvider, 
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "ravhaorh.firebaseapp.com",
+      projectId: "ravhaorh",
+      appId: "SEU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.loginGoogle = async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (e) {
+        alert("Erro no login");
+        console.error(e);
+      }
+    };
+
+    window.logout = async () => {
+      await signOut(auth);
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      const info = document.getElementById("user-info");
+      if (user) {
+        info.innerText = "Logado: " + user.email;
+      } else {
+        info.innerText = "Não logado";
+      }
+    });
+  </script>
+
+</body>
 </html>
