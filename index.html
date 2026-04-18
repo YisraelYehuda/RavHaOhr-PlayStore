@@ -140,8 +140,7 @@
     import {
       getAuth,
       GoogleAuthProvider,
-      signInWithRedirect,
-      getRedirectResult,
+      signInWithPopup,
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       updateProfile,
@@ -217,7 +216,9 @@
       try{
         lockUI(true);
         setStatus("Abrindo autenticação Google…");
-        await signInWithRedirect(auth, provider);
+        await signInWithPopup(auth, provider);
+        setStatus("Login concluído. Entrando no Rav…", "ok");
+        goToRav();
       }catch(error){
         lockUI(false);
         handleAuthError(error);
@@ -267,19 +268,8 @@
         handleAuthError(error);
       }
     }
+    lockUI(false);
 
-    try{
-      lockUI(true);
-      const result = await getRedirectResult(auth);
-      if (result?.user){
-        setStatus("Login concluído. Entrando no Rav…", "ok");
-        goToRav();
-      }
-    }catch(error){
-      handleAuthError(error);
-    }finally{
-      lockUI(false);
-    }
 
     onAuthStateChanged(auth, (user) => {
       if(user){
