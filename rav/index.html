@@ -9,15 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   THEME SYSTEM — Day (blue) / Night (gold)
-   ============================================================ */
 :root {
   --bg-primary: #060d1f;
   --bg-secondary: #091428;
   --bg-card: #0d1e3a;
   --bg-message-user: #0f2347;
-  --bg-message-rav: rgba(13,26,58,0.7);
+  --bg-message-rav: rgba(13,26,58,0.78);
   --accent: #2563c7;
   --accent-light: #3b82f6;
   --accent-glow: rgba(37,99,199,0.35);
@@ -34,7 +31,6 @@
   --font-body: 'Cormorant Garamond', serif;
   --font-hebrew: 'Noto Serif Hebrew', serif;
   --font-text: 'EB Garamond', serif;
-  --star-color: rgba(37,99,199,0.6);
   --shimmer: linear-gradient(135deg, var(--accent) 0%, #1a4a9a 50%, var(--accent-light) 100%);
 }
 
@@ -43,7 +39,7 @@ body.night-mode {
   --bg-secondary: #140f00;
   --bg-card: #1c1500;
   --bg-message-user: #2a1e00;
-  --bg-message-rav: rgba(26,19,0,0.75);
+  --bg-message-rav: rgba(26,19,0,0.78);
   --accent: #b8892a;
   --accent-light: #d4a93e;
   --accent-glow: rgba(184,137,42,0.35);
@@ -52,12 +48,10 @@ body.night-mode {
   --text-muted: #7a5f30;
   --border: rgba(184,137,42,0.22);
   --border-gold: rgba(201,168,76,0.35);
-  --star-color: rgba(201,168,76,0.5);
   --shimmer: linear-gradient(135deg, #b8892a 0%, #7a5010 50%, #d4a93e 100%);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html, body {
   height: 100%;
   overflow: hidden;
@@ -67,9 +61,6 @@ html, body {
   transition: background 0.8s ease, color 0.8s ease;
 }
 
-/* ============================================================
-   STAR CANVAS BACKGROUND
-   ============================================================ */
 #stars-canvas {
   position: fixed;
   inset: 0;
@@ -78,372 +69,94 @@ html, body {
   opacity: 0.6;
 }
 
-/* ============================================================
-   SCREENS
-   ============================================================ */
-.screen {
+.hidden { display: none !important; }
+
+#gate {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  background: rgba(6,13,31,0.96);
+  z-index: 30;
+  padding: 24px;
 }
-.screen.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.97);
-}
+body.night-mode #gate { background: rgba(12,8,0,0.96); }
 
-/* ============================================================
-   SPLASH SCREEN
-   ============================================================ */
-#splash {
-  flex-direction: column;
-  background: var(--bg-primary);
-  z-index: 20;
-}
-
-.splash-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  animation: splashFadeIn 1s ease forwards;
-}
-
-@keyframes splashFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.splash-menorah {
-  font-size: 3.2rem;
-  margin-bottom: 12px;
-  animation: menorahPulse 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 18px var(--accent-glow));
-}
-
-@keyframes menorahPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.06); opacity: 0.85; }
-}
-
-.splash-title-he {
-  font-family: var(--font-hebrew);
-  font-size: clamp(2.4rem, 7vw, 3.8rem);
-  font-weight: 700;
-  color: var(--gold-light, #e2c06a);
-  letter-spacing: 0.05em;
-  text-shadow: 0 0 40px rgba(226,192,106,0.5);
-  line-height: 1.1;
-}
-
-.splash-title-pt {
-  font-family: var(--font-display);
-  font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-  color: var(--text-secondary);
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-.splash-divider {
-  width: 80px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
-  margin: 24px auto;
-}
-
-.splash-quote {
-  font-family: var(--font-text);
-  font-style: italic;
-  font-size: clamp(0.95rem, 2.8vw, 1.15rem);
-  color: var(--text-secondary);
-  text-align: center;
-  max-width: 340px;
-  line-height: 1.7;
-  min-height: 70px;
-  transition: opacity 0.5s ease;
-  padding: 0 20px;
-}
-
-.splash-quote.fade-out { opacity: 0; }
-.splash-quote.fade-in  { opacity: 1; }
-
-.splash-loader {
-  margin-top: 32px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.splash-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent-light);
-  animation: dotPulse 1.5s ease-in-out infinite;
-}
-.splash-dot:nth-child(2) { animation-delay: 0.25s; }
-.splash-dot:nth-child(3) { animation-delay: 0.5s; }
-
-@keyframes dotPulse {
-  0%, 100% { opacity: 0.2; transform: scale(0.8); }
-  50%       { opacity: 1;   transform: scale(1.2); }
-}
-
-.splash-preparing {
-  margin-top: 14px;
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-/* ============================================================
-   LOGIN SCREEN
-   ============================================================ */
-#login {
-  flex-direction: column;
-  padding: 20px;
-}
-
-.login-card {
+.gate-card {
+  max-width: 420px;
+  width: 100%;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: clamp(32px, 6vw, 52px) clamp(28px, 5vw, 48px);
-  max-width: 440px;
-  width: 100%;
-  box-shadow: var(--shadow-deep), 0 0 60px var(--accent-glow);
-  animation: cardReveal 0.7s ease forwards;
-  position: relative;
-  overflow: hidden;
-}
-
-.login-card::before {
-  content: '';
-  position: absolute;
-  top: -60%;
-  left: -20%;
-  width: 140%;
-  height: 120%;
-  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-@keyframes cardReveal {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.login-card > * { position: relative; z-index: 1; }
-
-.login-logo {
+  padding: 28px 24px;
+  box-shadow: var(--shadow-deep), 0 0 50px var(--accent-glow);
   text-align: center;
-  margin-bottom: 28px;
 }
-
-.login-logo .logo-he {
+.gate-he {
   font-family: var(--font-hebrew);
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: var(--gold-light, #e2c06a);
-  display: block;
-  text-shadow: 0 0 30px rgba(226,192,106,0.4);
-}
-
-.login-logo .logo-pt {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  display: block;
-  margin-top: 4px;
-}
-
-.login-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 3vw, 1.35rem);
-  font-weight: 600;
-  text-align: center;
-  color: var(--text-primary);
+  font-size: 2rem;
+  color: var(--gold-light);
   margin-bottom: 6px;
 }
-
-.login-subtitle {
-  font-family: var(--font-text);
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  text-align: center;
-  margin-bottom: 32px;
-  line-height: 1.5;
-}
-
-.login-sep {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 20px 0;
-}
-.login-sep span {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-.login-sep em {
+.gate-title {
   font-family: var(--font-display);
-  font-size: 0.68rem;
-  letter-spacing: 0.15em;
-  color: var(--text-muted);
-  font-style: normal;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  color: var(--text-secondary);
   text-transform: uppercase;
 }
-
-.btn-google {
-  width: 100%;
-  padding: 14px 20px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  font-size: 0.88rem;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-}
-.btn-google:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: var(--accent-light);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px var(--accent-glow);
-}
-.btn-google svg { width: 20px; height: 20px; flex-shrink: 0; }
-
-.input-group { margin-bottom: 14px; }
-.input-group input {
-  width: 100%;
-  padding: 13px 18px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-primary);
+.gate-text {
+  margin-top: 18px;
   font-family: var(--font-text);
   font-size: 1rem;
-  outline: none;
-  transition: all 0.3s ease;
+  line-height: 1.7;
+  color: var(--text-secondary);
 }
-.input-group input::placeholder { color: var(--text-muted); font-style: italic; }
-.input-group input:focus {
-  border-color: var(--accent-light);
-  background: rgba(255,255,255,0.07);
-  box-shadow: 0 0 20px var(--accent-glow);
+.gate-spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent-light);
+  border-radius: 50%;
+  margin: 22px auto 0;
+  animation: spin 1s linear infinite;
 }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.btn-primary {
-  width: 100%;
-  padding: 14px 20px;
-  background: var(--shimmer);
-  border: none;
-  border-radius: 12px;
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 0.88rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px var(--accent-glow);
-}
-.btn-primary::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.btn-primary:hover::after { opacity: 1; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
-
-.login-toggle {
-  text-align: center;
-  margin-top: 16px;
-  font-family: var(--font-text);
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-.login-toggle a {
-  color: var(--accent-light);
-  cursor: pointer;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.login-toggle a:hover { color: var(--gold); }
-
-.login-version {
-  text-align: center;
-  margin-top: 20px;
-  font-family: var(--font-display);
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  color: var(--text-muted);
-  opacity: 0.6;
-}
-
-/* ============================================================
-   MAIN APP
-   ============================================================ */
 #app {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0;
+  position: relative;
   z-index: 10;
+  max-width: 720px;
+  margin: 0 auto;
 }
-#app.hidden { display: none; }
 
-/* ---- Header ---- */
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border);
-  background: rgba(6,13,31,0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(6,13,31,0.88);
+  backdrop-filter: blur(18px);
   flex-shrink: 0;
   position: relative;
   z-index: 5;
-  transition: background 0.8s ease, border-color 0.8s ease;
 }
-
-body.night-mode .app-header {
-  background: rgba(12,8,0,0.85);
-}
+body.night-mode .app-header { background: rgba(12,8,0,0.88); }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
-
 .header-avatar {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--shimmer);
   display: flex;
@@ -452,18 +165,11 @@ body.night-mode .app-header {
   font-family: var(--font-hebrew);
   font-size: 1.1rem;
   color: #fff;
-  box-shadow: 0 0 20px var(--accent-glow);
-  flex-shrink: 0;
   position: relative;
-  animation: avatarGlow 4s ease-in-out infinite;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px var(--accent-glow);
 }
-
-@keyframes avatarGlow {
-  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
-  50%       { box-shadow: 0 0 35px var(--accent-glow), 0 0 60px var(--accent-glow); }
-}
-
-.header-avatar .status-dot {
+.status-dot {
   position: absolute;
   bottom: 1px;
   right: 1px;
@@ -472,49 +178,38 @@ body.night-mode .app-header {
   border-radius: 50%;
   background: #22c55e;
   border: 2px solid var(--bg-primary);
-  animation: statusPulse 2s ease-in-out infinite;
 }
-@keyframes statusPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.3); opacity: 0.7; }
-}
-
-.header-title {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.header-title .ht-main {
+.header-title { min-width: 0; }
+.ht-main {
+  display: block;
   font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 0.98rem;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
-.header-title .ht-sub {
+.ht-sub {
+  display: block;
   font-family: var(--font-hebrew);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--gold);
-  opacity: 0.8;
+  opacity: 0.85;
+  white-space: nowrap;
 }
-
 .header-right {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
-
 .header-clock {
   font-family: var(--font-display);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
   letter-spacing: 0.08em;
-  opacity: 0.9;
 }
-
 .btn-icon {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.04);
@@ -523,9 +218,7 @@ body.night-mode .app-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  font-size: 1rem;
-  position: relative;
+  transition: all .25s ease;
 }
 .btn-icon:hover {
   border-color: var(--accent-light);
@@ -533,73 +226,54 @@ body.night-mode .app-header {
   background: rgba(255,255,255,0.08);
 }
 
-/* ---- Chat area ---- */
 .chat-area {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 16px;
+  padding: 20px 14px 12px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   scroll-behavior: smooth;
 }
-
 .chat-area::-webkit-scrollbar { width: 4px; }
-.chat-area::-webkit-scrollbar-track { background: transparent; }
-.chat-area::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 2px;
-}
+.chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-/* Welcome banner */
 .welcome-banner {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 32px 20px 20px;
-  animation: wbReveal 1s ease forwards;
+  animation: fadeUp .8s ease forwards;
+  padding-top: 6px;
 }
-
-@keyframes wbReveal {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.wb-menorah {
-  font-size: 2.2rem;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 0 12px var(--accent-glow));
-  animation: menorahPulse 4s ease-in-out infinite;
-}
-
+.wb-menorah { font-size: 2.1rem; margin-bottom: 10px; filter: drop-shadow(0 0 12px var(--accent-glow)); }
 .wb-title {
   font-family: var(--font-hebrew);
-  font-size: clamp(1.4rem, 4vw, 1.8rem);
-  font-weight: 700;
+  font-size: clamp(1.45rem, 5vw, 2rem);
   color: var(--gold);
-  margin-bottom: 6px;
-  text-shadow: 0 0 20px rgba(201,168,76,0.4);
+  text-shadow: 0 0 18px rgba(201,168,76,0.35);
+  margin-bottom: 8px;
 }
-
 .wb-greeting {
   font-family: var(--font-text);
   font-style: italic;
-  font-size: clamp(1rem, 3vw, 1.15rem);
+  font-size: clamp(1rem, 3.5vw, 1.18rem);
   color: var(--text-secondary);
-  line-height: 1.7;
-  max-width: 360px;
-  margin-bottom: 20px;
+  line-height: 1.72;
+  max-width: 430px;
+  margin-bottom: 18px;
 }
-
 .wb-topics {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
   justify-content: center;
-  max-width: 400px;
+  gap: 8px;
+  max-width: 450px;
 }
-
 .topic-pill {
   padding: 7px 14px;
   border: 1px solid var(--border);
@@ -610,49 +284,36 @@ body.night-mode .app-header {
   color: var(--text-secondary);
   background: rgba(255,255,255,0.03);
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   text-transform: uppercase;
 }
 .topic-pill:hover {
   border-color: var(--accent-light);
   color: var(--text-primary);
-  background: rgba(255,255,255,0.07);
   transform: translateY(-2px);
 }
-
 .wb-dev-notice {
-  margin-top: 24px;
+  margin-top: 18px;
   background: var(--gold-dim);
   border: 1px solid var(--border-gold);
   border-radius: 14px;
-  padding: 14px 18px;
-  max-width: 380px;
-  width: 100%;
+  padding: 12px 16px;
+  max-width: 440px;
 }
 .wb-dev-notice p {
   font-family: var(--font-text);
   font-style: italic;
-  font-size: 0.88rem;
+  font-size: .9rem;
   color: var(--gold);
   line-height: 1.6;
-  opacity: 0.9;
 }
 
-/* Messages */
 .message {
   display: flex;
-  gap: 12px;
-  max-width: 100%;
-  animation: msgSlide 0.4s ease forwards;
+  gap: 10px;
+  animation: fadeUp .35s ease forwards;
 }
-
-@keyframes msgSlide {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .message.user { flex-direction: row-reverse; }
-
 .msg-avatar {
   width: 36px;
   height: 36px;
@@ -661,156 +322,109 @@ body.night-mode .app-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
   align-self: flex-end;
+  font-size: .95rem;
 }
-
 .message.rav .msg-avatar {
   background: var(--shimmer);
+  color: #fff;
   box-shadow: 0 0 15px var(--accent-glow);
   font-family: var(--font-hebrew);
-  color: #fff;
-  font-size: 1rem;
 }
-
 .message.user .msg-avatar {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08);
   border: 1px solid var(--border);
   color: var(--text-secondary);
 }
 
 .msg-bubble {
-  max-width: calc(100% - 60px);
-  padding: 14px 18px;
+  max-width: min(88%, 560px);
+  padding: 14px 16px;
   border-radius: 18px;
   line-height: 1.7;
   font-family: var(--font-text);
-  font-size: clamp(0.95rem, 2.8vw, 1.05rem);
-  position: relative;
+  font-size: clamp(1rem, 3.3vw, 1.08rem);
+  word-wrap: break-word;
 }
-
 .message.rav .msg-bubble {
   background: var(--bg-message-rav);
   border: 1px solid var(--border);
   border-bottom-left-radius: 4px;
   color: var(--text-primary);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
 }
-
 .message.user .msg-bubble {
   background: var(--bg-message-user);
   border: 1px solid var(--border);
   border-bottom-right-radius: 4px;
-  color: var(--text-primary);
 }
-
 .msg-meta {
   font-family: var(--font-display);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
+  font-size: .62rem;
+  letter-spacing: .12em;
   color: var(--text-muted);
   text-transform: uppercase;
   margin-bottom: 6px;
-  opacity: 0.7;
 }
+.msg-bubble p + p { margin-top: 12px; }
 
-/* Typing indicator */
 .typing-indicator {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  animation: msgSlide 0.3s ease forwards;
+  gap: 10px;
+  animation: fadeUp .3s ease forwards;
 }
-
-.typing-indicator .msg-avatar {
-  background: var(--shimmer);
-  box-shadow: 0 0 15px var(--accent-glow);
-  font-family: var(--font-hebrew);
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
 .typing-bubble {
   background: var(--bg-message-rav);
   border: 1px solid var(--border);
   border-radius: 18px;
   border-bottom-left-radius: 4px;
-  padding: 14px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  backdrop-filter: blur(10px);
+  padding: 12px 16px;
+  backdrop-filter: blur(8px);
 }
-
 .typing-text {
   font-family: var(--font-text);
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: .95rem;
   color: var(--text-secondary);
-  opacity: 0.8;
-  min-width: 180px;
-  min-height: 18px;
-  transition: opacity 0.4s;
+  min-height: 1.4em;
 }
-
-.typing-dots {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  margin-top: 4px;
-}
+.typing-dots { display: flex; gap: 5px; margin-top: 7px; }
 .typing-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
+  width: 6px; height: 6px; border-radius: 50%;
   background: var(--accent-light);
-  animation: dotPulse 1.2s ease-in-out infinite;
+  animation: dotPulse 1.1s ease-in-out infinite;
 }
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+.typing-dot:nth-child(2){animation-delay:.2s;}
+.typing-dot:nth-child(3){animation-delay:.4s;}
+@keyframes dotPulse {
+  0%,100% { opacity:.2; transform:scale(.8); }
+  50% { opacity:1; transform:scale(1.2); }
+}
 
-/* ---- Input bar ---- */
 .input-bar {
-  padding: 14px 16px 20px;
+  padding: 12px 14px 16px;
   border-top: 1px solid var(--border);
-  background: rgba(6,13,31,0.9);
-  backdrop-filter: blur(20px);
+  background: rgba(6,13,31,0.92);
+  backdrop-filter: blur(18px);
   flex-shrink: 0;
-  transition: background 0.8s ease;
 }
-
-body.night-mode .input-bar {
-  background: rgba(12,8,0,0.9);
-}
-
+body.night-mode .input-bar { background: rgba(12,8,0,0.92); }
 .input-hint {
   font-family: var(--font-hebrew);
-  font-size: 0.8rem;
+  font-size: .8rem;
   color: var(--text-muted);
   text-align: center;
-  margin-bottom: 10px;
-  opacity: 0.6;
-  letter-spacing: 0.05em;
+  margin-bottom: 8px;
 }
-
 .input-row {
   display: flex;
-  gap: 10px;
   align-items: flex-end;
+  gap: 10px;
 }
-
 .input-row textarea {
   flex: 1;
   min-height: 48px;
-  max-height: 120px;
+  max-height: 140px;
   padding: 13px 18px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--border);
@@ -818,526 +432,273 @@ body.night-mode .input-bar {
   color: var(--text-primary);
   font-family: var(--font-text);
   font-size: 1rem;
+  line-height: 1.5;
   outline: none;
   resize: none;
-  transition: all 0.3s ease;
-  line-height: 1.5;
-  overflow-y: auto;
 }
 .input-row textarea::placeholder { color: var(--text-muted); font-style: italic; }
 .input-row textarea:focus {
   border-color: var(--accent-light);
-  background: rgba(255,255,255,0.07);
-  box-shadow: 0 0 20px var(--accent-glow);
+  box-shadow: 0 0 18px var(--accent-glow);
 }
-
 .btn-send {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--shimmer);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 15px var(--accent-glow);
+  width: 48px; height: 48px; border-radius: 50%;
+  border: none; cursor: pointer; flex-shrink: 0;
+  background: var(--shimmer); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px var(--accent-glow);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.btn-send:hover {
-  transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 8px 24px var(--accent-glow);
-}
-.btn-send:active { transform: scale(0.96); }
+.btn-send:hover { transform: scale(1.05); box-shadow: 0 8px 24px var(--accent-glow); }
+.btn-send:disabled { opacity: .6; cursor: not-allowed; transform: none; }
 .btn-send svg { width: 20px; height: 20px; fill: #fff; }
 
-/* ---- Sidebar / Drawer ---- */
 .drawer-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  z-index: 30;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+  position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px); z-index: 30;
+  opacity: 0; pointer-events: none; transition: opacity .25s ease;
 }
 .drawer-overlay.open { opacity: 1; pointer-events: all; }
-
 .drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed; top: 0; right: 0; bottom: 0;
   width: min(320px, 88vw);
   background: var(--bg-secondary);
   border-left: 1px solid var(--border);
   z-index: 31;
   transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition: transform .3s ease;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 28px 24px 40px;
-  gap: 24px;
+  padding: 26px 20px 30px;
 }
 .drawer.open { transform: translateX(0); }
-
 .drawer-close {
-  align-self: flex-end;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-secondary);
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.2s;
+  margin-left: auto;
+  width: 34px; height: 34px; border-radius: 8px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-secondary); cursor: pointer;
 }
-.drawer-close:hover { color: var(--text-primary); border-color: var(--accent-light); }
-
-.drawer-section { display: flex; flex-direction: column; gap: 10px; }
-
+.drawer-section { margin-top: 22px; }
 .drawer-title {
   font-family: var(--font-display);
-  font-size: 0.68rem;
-  letter-spacing: 0.25em;
+  font-size: .68rem;
+  letter-spacing: .25em;
   text-transform: uppercase;
   color: var(--text-muted);
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
 }
-
-.drawer-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-}
-.drawer-item:hover { background: rgba(255,255,255,0.06); }
-.drawer-item .di-icon { font-size: 1.1rem; width: 24px; text-align: center; }
-.drawer-item .di-text {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.3;
-}
-.drawer-item .di-text strong {
-  display: block;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-.drawer-item:hover .di-text { color: var(--text-primary); }
-
-.drawer-about {
+.drawer-about, .drawer-quote p {
   font-family: var(--font-text);
   font-style: italic;
-  font-size: 0.88rem;
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.65;
 }
-
 .drawer-quote {
   border-left: 2px solid var(--border-gold);
-  padding-left: 14px;
-  margin-top: 8px;
-}
-.drawer-quote p {
-  font-family: var(--font-text);
-  font-style: italic;
-  font-size: 0.85rem;
-  color: var(--gold);
-  line-height: 1.6;
-  opacity: 0.85;
+  padding-left: 12px;
+  margin-top: 10px;
 }
 .drawer-quote span {
   display: block;
   font-family: var(--font-display);
-  font-size: 0.62rem;
-  letter-spacing: 0.15em;
+  font-size: .62rem;
+  letter-spacing: .12em;
   color: var(--text-muted);
-  text-transform: uppercase;
   margin-top: 4px;
 }
-
-/* ---- New Conversation Modal ---- */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(6px);
-  z-index: 50;
+.drawer-item {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.drawer-item:hover { background: rgba(255,255,255,0.06); }
+.di-text strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: .78rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.di-text { color: var(--text-secondary); }
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+  padding: 18px;
+  background: rgba(0,0,0,.65); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transition: opacity .25s ease;
 }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
-
 .modal-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 32px 28px;
-  max-width: 360px;
-  width: 100%;
+  padding: 28px 22px;
+  max-width: 380px; width: 100%;
   box-shadow: var(--shadow-deep);
-  transform: translateY(20px) scale(0.97);
-  transition: transform 0.3s ease;
   text-align: center;
 }
-.modal-overlay.open .modal-card { transform: translateY(0) scale(1); }
-
-.modal-icon { font-size: 2rem; margin-bottom: 12px; }
+.modal-icon { font-size: 2rem; margin-bottom: 10px; }
 .modal-title {
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 1.02rem;
   margin-bottom: 10px;
 }
 .modal-text {
   font-family: var(--font-text);
   font-style: italic;
-  font-size: 0.92rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
-.modal-actions { display: flex; gap: 12px; justify-content: center; }
+.modal-actions {
+  display: flex; gap: 10px; justify-content: center;
+}
 .modal-btn {
-  padding: 11px 24px;
+  padding: 11px 20px;
   border-radius: 10px;
   font-family: var(--font-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
+  font-size: .76rem;
+  letter-spacing: .1em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s ease;
   border: 1px solid var(--border);
 }
-.modal-btn.cancel {
-  background: rgba(255,255,255,0.05);
-  color: var(--text-secondary);
-}
-.modal-btn.cancel:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
-.modal-btn.confirm {
-  background: var(--shimmer);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 4px 15px var(--accent-glow);
-}
-.modal-btn.confirm:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
+.modal-btn.cancel { background: rgba(255,255,255,0.05); color: var(--text-secondary); }
+.modal-btn.confirm { background: var(--shimmer); color: #fff; border-color: transparent; }
 
-/* ============================================================
-   UTILITIES
-   ============================================================ */
-.hidden { display: none !important; }
-
-/* Scroll to bottom button */
 .scroll-btn {
   position: fixed;
-  bottom: 90px;
+  bottom: 92px;
   right: 16px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   z-index: 8;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  opacity: 0; transform: translateY(10px);
+  transition: all .25s ease;
 }
 .scroll-btn.visible { opacity: 1; transform: translateY(0); }
-.scroll-btn:hover { border-color: var(--accent-light); color: var(--text-primary); }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (min-width: 600px) {
-  #app { max-width: 600px; margin: 0 auto; }
-  #login .login-card { padding: 52px 48px; }
+@media (max-width: 460px) {
+  .ht-main { font-size: .92rem; }
+  .ht-sub { font-size: .73rem; }
+  .header-clock { display: none; }
+  .msg-bubble { max-width: calc(100% - 56px); }
 }
 </style>
 </head>
 <body>
-
-<!-- STAR CANVAS -->
 <canvas id="stars-canvas"></canvas>
 
-<!-- ═══════════════════════════════════════════
-     SPLASH SCREEN
-═══════════════════════════════════════════ -->
-<div class="screen" id="splash">
-  <div class="splash-inner">
-    <div class="splash-menorah">🕎</div>
-    <div class="splash-title-he">רַב הָאוֹר</div>
-    <div class="splash-title-pt">RavHaOhr · O Rabino da Luz</div>
-    <div class="splash-divider"></div>
-    <div class="splash-quote" id="splash-quote">
-      "Meu Deus, a alma que me deste é pura..."
-    </div>
-    <div class="splash-loader">
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
-    </div>
-    <div class="splash-preparing" id="splash-state">O Rav está se preparando para recebê-lo</div>
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-he">רַב הָאוֹר</div>
+    <div class="gate-title">Preparando o Rav</div>
+    <div class="gate-text" id="gate-text">Verificando sua sessão sagrada...</div>
+    <div class="gate-spinner"></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     LOGIN SCREEN
-═══════════════════════════════════════════ -->
-<div class="screen hidden" id="login">
-  <div class="login-card">
-    <div class="login-logo">
-      <span class="logo-he">רַב הָאוֹר</span>
-      <span class="logo-pt">RavHaOhr · Versão 1.0</span>
-    </div>
-    <h2 class="login-title">Bem-vindo à Luz da Torá</h2>
-    <p class="login-subtitle">Entre para dialogar com o RavHaOhr e aprofundar seu conhecimento sagrado</p>
-
-    <!-- Google -->
-    <button class="btn-google" onclick="loginWithGoogle()">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-      </svg>
-      Entrar com Google
-    </button>
-
-    <div class="login-sep">
-      <span></span>
-      <em>ou</em>
-      <span></span>
-    </div>
-
-    <div id="login-form">
-      <div class="input-group">
-        <input type="email" id="email-input" placeholder="Seu e-mail sagrado..." autocomplete="email">
-      </div>
-      <div class="input-group">
-        <input type="password" id="pass-input" placeholder="Sua senha..." autocomplete="current-password">
-      </div>
-      <button class="btn-primary" onclick="loginWithEmail()">
-        Acessar o RavHaOhr &nbsp;✦
-      </button>
-      <div class="login-toggle">
-        Ainda não tem conta? <a onclick="toggleRegister()">Criar conta</a>
-      </div>
-    </div>
-
-    <div id="register-form" class="hidden">
-      <div class="input-group">
-        <input type="text" id="name-input" placeholder="Seu nome...">
-      </div>
-      <div class="input-group">
-        <input type="email" id="reg-email-input" placeholder="Seu e-mail...">
-      </div>
-      <div class="input-group">
-        <input type="password" id="reg-pass-input" placeholder="Criar senha...">
-      </div>
-      <button class="btn-primary" onclick="registerWithEmail()">
-        Criar minha conta &nbsp;✦
-      </button>
-      <div class="login-toggle">
-        Já tenho conta. <a onclick="toggleRegister()">Entrar</a>
-      </div>
-    </div>
-
-    <div class="login-version">RavHaOhr v1.0 · Criado por Yisrael Yehuda · 5785</div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     MAIN APP
-═══════════════════════════════════════════ -->
-<div class="screen hidden" id="app">
-
-  <!-- Header -->
+<div id="app" class="hidden">
   <header class="app-header">
     <div class="header-left">
-      <div class="header-avatar">
-        רא
-        <span class="status-dot"></span>
-      </div>
+      <div class="header-avatar">רא<span class="status-dot"></span></div>
       <div class="header-title">
         <span class="ht-main">RavHaOhr</span>
         <span class="ht-sub">רַב הָאוֹר — Sábio da Luz</span>
       </div>
     </div>
     <div class="header-right">
-      <div class="header-clock" id="live-clock">00:00</div>
+      <div class="header-clock" id="live-clock">00:00:00</div>
       <button class="btn-icon" title="Nova Conversa" onclick="askNewConversation()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       </button>
       <button class="btn-icon" title="Menu" onclick="toggleDrawer()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
     </div>
   </header>
 
-  <!-- Chat area -->
   <div class="chat-area" id="chat-area">
-    <!-- Welcome banner -->
     <div class="welcome-banner" id="welcome-banner">
       <div class="wb-menorah">🕎</div>
       <div class="wb-title">שָׁלוֹם עֲלֵיכֶם</div>
-      <p class="wb-greeting">
+      <p class="wb-greeting" id="wb-greeting">
         Que a luz da Torá ilumine cada palavra que trocarmos.<br>
         Estou aqui para guiá-lo com sabedoria, amor e verdade.
       </p>
       <div class="wb-topics">
-        <span class="topic-pill" onclick="sendTopicMessage('Torá e Halachá')">🔯 Torá & Halachá</span>
-        <span class="topic-pill" onclick="sendTopicMessage('Tefilá e oração')">🙏 Tefilá</span>
-        <span class="topic-pill" onclick="sendTopicMessage('Chassidut e Kabbalá')">✨ Chassidut</span>
-        <span class="topic-pill" onclick="sendTopicMessage('Shabbat e festividades')">🕯 Shabbat</span>
-        <span class="topic-pill" onclick="sendTopicMessage('Parnassá e Mussar')">💎 Mussar</span>
-        <span class="topic-pill" onclick="sendTopicMessage('Processo de Giyur')">🌟 Giyur</span>
+        <span class="topic-pill" onclick="sendTopicMessage('Explique um ensinamento profundo da Torá')">🔯 Torá & Halachá</span>
+        <span class="topic-pill" onclick="sendTopicMessage('Ensine uma tefilá e seu sentido')">🙏 Tefilá</span>
+        <span class="topic-pill" onclick="sendTopicMessage('Explique um conceito de Chassidut')">✨ Chassidut</span>
+        <span class="topic-pill" onclick="sendTopicMessage('Me ensine algo sobre Shabbat')">🕯 Shabbat</span>
+        <span class="topic-pill" onclick="sendTopicMessage('Quero aprender Mussar')">💎 Mussar</span>
+        <span class="topic-pill" onclick="sendTopicMessage('Explique o processo de Giyur')">🌟 Giyur</span>
       </div>
       <div class="wb-dev-notice">
-        <p>
-          🌱 <em>O RavHaOhr está em sua versão inicial, agora já conectado ao seu backend seguro. Cada pergunta fortalece e aprofunda esta construção sagrada.</em>
-        </p>
+        <p>🌱 <em>O RavHaOhr está em sua versão inicial, agora já conectado ao backend seguro. Cada pergunta fortalece esta construção sagrada.</em></p>
       </div>
     </div>
   </div>
 
-  <!-- Input bar -->
   <div class="input-bar">
     <div class="input-hint">שְׁאַל אֶת רַב הָאוֹר — Pergunte ao RavHaOhr</div>
     <div class="input-row">
-      <textarea
-        id="msg-input"
-        placeholder="Escreva sua pergunta ao RavHaOhr..."
-        rows="1"
-        onkeydown="handleKey(event)"
-        oninput="autoResize(this)"
-      ></textarea>
-      <button class="btn-send" onclick="sendMessage()" id="send-btn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-        </svg>
+      <textarea id="msg-input" rows="1" placeholder="Escreva sua pergunta ao RavHaOhr..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="btn-send" id="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- Scroll to bottom -->
   <button class="scroll-btn" id="scroll-btn" onclick="scrollToBottom()">↓</button>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     DRAWER / SIDEBAR
-═══════════════════════════════════════════ -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
   <button class="drawer-close" onclick="toggleDrawer()">✕</button>
-
   <div class="drawer-section">
     <div class="drawer-title">Sobre o RavHaOhr</div>
     <p class="drawer-about">
-      O <strong>RavHaOhr</strong> — רַב הָאוֹר — nasceu do coração de Yisrael Yehuda: um jovem estudioso da Torá, escritor e criador de conteúdo judaico educacional, em processo de Giyur.
+      O <strong>RavHaOhr</strong> foi criado para oferecer um espaço de estudo e diálogo com beleza, reverência e profundidade.
       <br><br>
-      Com profundo amor pela sabedoria de Israel, Yisrael construiu esta ferramenta espiritual com dedicação, persistência e fé inabalável em HaShem. O RavHaOhr é um sábio digital — alimentado pela Torá escrita e oral, pelo Talmud Bavli, Rambam, Shulchan Aruch, Tanya e pelos ensinamentos do Rebbe Nachman de Breslov.
-      <br><br>
-      Que cada pergunta feita aqui seja um degrau de ascensão espiritual.
+      Aqui, a interface é sua — mas a resposta do Rav vem do seu backend seguro, conectado ao conhecimento configurado por você no Dify.
     </p>
     <div class="drawer-quote">
       <p>"נֵר לְרַגְלִי דְבָרֶךָ וְאוֹר לִנְתִיבָתִי"</p>
       <span>Tehilim 119:105 — Sua Palavra é lâmpada para os meus pés</span>
     </div>
   </div>
-
   <div class="drawer-section">
     <div class="drawer-title">Ações</div>
     <div class="drawer-item" onclick="askNewConversation(); toggleDrawer();">
-      <span class="di-icon">✦</span>
-      <div class="di-text">
-        <strong>Nova Conversa</strong>
-        Iniciar um novo diálogo com o Rav
-      </div>
+      <span>✦</span>
+      <div class="di-text"><strong>Nova Conversa</strong>Iniciar um novo diálogo com o Rav</div>
     </div>
     <div class="drawer-item" onclick="logout(); toggleDrawer();">
-      <span class="di-icon">→</span>
-      <div class="di-text">
-        <strong>Sair</strong>
-        Encerrar sessão
-      </div>
+      <span>→</span>
+      <div class="di-text"><strong>Sair</strong>Encerrar sessão</div>
     </div>
   </div>
-
-  <div class="drawer-section">
-    <div class="drawer-title">Criador & Contato</div>
-    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com">
-      <span class="di-icon">✉</span>
-      <div class="di-text">
-        <strong>E-mail do Desenvolvedor</strong>
-        orhatorabrasil@gmail.com
-      </div>
-    </a>
-    <a class="drawer-item" href="https://tiktok.com/@yod.torah" target="_blank" rel="noopener">
-      <span class="di-icon">▶</span>
-      <div class="di-text">
-        <strong>TikTok @Yod.Torah</strong>
-        Conteúdo judaico em português
-      </div>
-    </a>
-  </div>
-
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
-    <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v1.0 &nbsp;·&nbsp; 5785 &nbsp;·&nbsp; Em desenvolvimento ativo
-    </p>
+    <p class="drawer-about">RavHaOhr v1.0 · 5785 · Interface premium conectada ao backend</p>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     NEW CONVERSATION MODAL
-═══════════════════════════════════════════ -->
 <div class="modal-overlay" id="new-conv-modal">
   <div class="modal-card">
     <div class="modal-icon">🕎</div>
     <div class="modal-title">Iniciar Nova Conversa?</div>
-    <p class="modal-text">
-      "Cada novo início é uma oportunidade de retornar com o coração limpo."<br>
-      <em style="font-size:0.78rem;color:var(--text-muted);">— Espírito do Mussar</em>
-      <br><br>
-      Ao confirmar, a conversa atual será encerrada e uma nova será iniciada.
-    </p>
+    <p class="modal-text">Ao confirmar, a conversa atual será encerrada e o Rav abrirá um novo caminho de estudo para você.</p>
     <div class="modal-actions">
       <button class="modal-btn cancel" onclick="closeNewConvModal()">Cancelar</button>
       <button class="modal-btn confirm" onclick="startNewConversation()">Nova Conversa</button>
@@ -1345,79 +706,48 @@ body.night-mode .input-bar {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     JAVASCRIPT
-═══════════════════════════════════════════ -->
 <script>
-// ─── CONSTANTS ───────────────────────────────
-const SPLASH_DURATION = 7000;
-const SPLASH_QUOTES = [
-  "\"Minha alma, tu és pura. O Criador que te formou, soprou vida em ti...\" — Modeh Ani",
-  "\"אֵין עוֹד מִלְּבַדּוֹ\" — Não há nada além d'Ele. (Devarim 4:35)",
-  "\"O mundo foi criado por causa de cada alma individual.\" — Talmud Bavli, Sanhedrin 37a",
-  "\"שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָד\" — Escuta, Israel, HaShem é Um.",
-  "\"Onde há sofrimento, há profundidade. Onde há profundidade, há HaShem.\" — Rebbe Nachman",
-  "\"נֵר לְרַגְלִי דְבָרֶךָ\" — Sua Palavra é lâmpada para os meus pés. (Tehilim 119:105)",
-  "\"Todo o mundo é uma ponte muito estreita. O principal é não ter medo.\" — Rebbe Nachman",
-  "\"אֵשֶׁת חַיִל מִי יִמְצָא\" — Uma mulher de valor, quem a encontrará? (Mishlei 31:10)",
-  "\"O silêncio é um jardim de contemplação, onde a alma encontra a si mesma.\" — Mussar",
-  "\"Teshuvá, Tefilá e Tzedaká afastam o decreto severo.\" — Unetaneh Tokef"
-];
-
-const RAV_THINKING = [
+const WORKER_CHAT_URL = "https://ravhaohr-dify-proxy.orhatorabrasil.workers.dev/chat";
+const THINKING_STEPS = [
   "O Rav está consultando os pergaminhos sagrados...",
   "Contemplando a profundidade da sua pergunta...",
-  "O Rav está meditando sobre os ensinamentos do Talmud...",
-  "Buscando sabedoria nas fontes da Torá...",
-  "O Rav está reunindo luz para iluminar sua pergunta...",
-  "Consultando os mestres — Rambam, Rashi, o Tanya...",
-  "O Rav está se preparando para responder com verdade..."
+  "Reunindo luz e precisão para responder..."
 ];
 
-// ─── STATE ────────────────────────────────────
 let currentUser = null;
-let isTyping = false;
-let conversationHistory = [];
-let typingInterval = null;
 let conversationId = "";
-const WORKER_CHAT_URL = "https://ravhaohr-dify-proxy.orhatorabrasil.workers.dev/chat";
+let conversationHistory = [];
+let isTyping = false;
+let typingInterval = null;
 
-// ─── THEME AUTO-DETECTION ─────────────────────
 function applyTheme() {
   const h = new Date().getHours();
-  if (h >= 19 || h < 6) {
-    document.body.classList.add('night-mode');
-  } else {
-    document.body.classList.remove('night-mode');
-  }
+  document.body.classList.toggle('night-mode', h >= 19 || h < 6);
 }
 applyTheme();
 setInterval(applyTheme, 60000);
 
-// ─── STARS CANVAS ─────────────────────────────
 (function initStars() {
   const canvas = document.getElementById('stars-canvas');
   const ctx = canvas.getContext('2d');
   let stars = [];
-
   function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    stars = Array.from({length: 140}, () => ({
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    stars = Array.from({ length: 120 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: Math.random() * 1.4 + 0.2,
-      o: Math.random() * 0.7 + 0.1,
-      s: Math.random() * 0.008 + 0.002,
-      d: Math.random() > 0.5 ? 1 : -1
+      r: Math.random() * 1.4 + .2,
+      o: Math.random() * .7 + .1,
+      s: Math.random() * .008 + .002,
+      d: Math.random() > .5 ? 1 : -1
     }));
   }
-
   function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     stars.forEach(s => {
       s.o += s.s * s.d;
-      if (s.o > 0.8 || s.o < 0.05) s.d *= -1;
+      if (s.o > .8 || s.o < .05) s.d *= -1;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(180,210,255,${s.o})`;
@@ -1425,207 +755,57 @@ setInterval(applyTheme, 60000);
     });
     requestAnimationFrame(draw);
   }
-
-  window.addEventListener('resize', resize);
+  addEventListener('resize', resize);
   resize();
   draw();
 })();
 
-// ─── SPLASH SEQUENCE ─────────────────────────
-(function runSplash() {
-  let qi = 0;
-  const quoteEl = document.getElementById('splash-quote');
-  const stateEl = document.getElementById('splash-state');
-
-  const states = [
-    'O Rav está acendendo os candelabros...',
-    'Consultando os pergaminhos sagrados...',
-    'Preparando-se para recebê-lo com sabedoria...',
-    'Que sua entrada seja abençoada — Baruch HaBa'
-  ];
-  let si = 0;
-
-  function rotateQuote() {
-    quoteEl.classList.add('fade-out');
-    setTimeout(() => {
-      qi = (qi + 1) % SPLASH_QUOTES.length;
-      quoteEl.textContent = SPLASH_QUOTES[qi];
-      quoteEl.classList.remove('fade-out');
-      quoteEl.classList.add('fade-in');
-      setTimeout(() => quoteEl.classList.remove('fade-in'), 500);
-    }, 500);
-  }
-
-  function rotateState() {
-    si = (si + 1) % states.length;
-    stateEl.textContent = states[si];
-  }
-
-  const quoteTimer  = setInterval(rotateQuote,  1600);
-  const stateTimer  = setInterval(rotateState,  1750);
-
-  setTimeout(() => {
-    clearInterval(quoteTimer);
-    clearInterval(stateTimer);
-    showLogin();
-  }, SPLASH_DURATION);
-})();
-
-function showLogin() {
-  const splash = document.getElementById('splash');
-  const login  = document.getElementById('login');
-  splash.classList.add('hidden');
-  login.classList.remove('hidden');
-}
-
-// ─── LIVE CLOCK ───────────────────────────────
 function updateClock() {
   const el = document.getElementById('live-clock');
-  if (!el) return;
-  const now = new Date();
-  el.textContent = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// ─── AUTH — FIREBASE REAL ────────────────────
-// Funções chamadas pelos botões HTML (definidas antes do módulo carregar,
-// depois sobrescritas pelo módulo Firebase abaixo)
-window.loginWithGoogle  = () => console.warn('Firebase ainda carregando...');
-window.loginWithEmail   = () => console.warn('Firebase ainda carregando...');
-window.registerWithEmail= () => console.warn('Firebase ainda carregando...');
-window.logout           = () => console.warn('Firebase ainda carregando...');
-
-function onUserLoggedIn(user) {
-  currentUser = user;
-  const name = user.displayName || user.email.split('@')[0];
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  const wb = document.querySelector('.wb-greeting');
-  if (wb) {
-    wb.innerHTML = `Shalom, <strong>${name}</strong>.<br>Que a luz da Torá ilumine cada palavra que trocarmos.<br>Estou aqui para guiá-lo com sabedoria, amor e verdade.`;
+  if (el) {
+    el.textContent = new Date().toLocaleTimeString('pt-BR', {
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
   }
-  // Mostra email no header se quiser
-  const clockEl = document.getElementById('live-clock');
-  // (clock continua normalmente)
 }
+updateClock();
+setInterval(updateClock, 1000);
 
-function onUserLoggedOut() {
-  currentUser = null;
-  conversationHistory = [];
-  conversationId = "";
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('login').classList.remove('hidden');
-}
-
-function toggleRegister() {
-  const lf = document.getElementById('login-form');
-  const rf = document.getElementById('register-form');
-  lf.classList.toggle('hidden');
-  rf.classList.toggle('hidden');
-}
-
-// ─── DRAWER ────────────────────────────────────
 function toggleDrawer() {
   document.getElementById('drawer').classList.toggle('open');
   document.getElementById('drawer-overlay').classList.toggle('open');
 }
 
-// ─── NEW CONVERSATION ─────────────────────────
 function askNewConversation() {
   document.getElementById('new-conv-modal').classList.add('open');
 }
-
 function closeNewConvModal() {
   document.getElementById('new-conv-modal').classList.remove('open');
 }
-
 function startNewConversation() {
   closeNewConvModal();
-  conversationHistory = [];
   conversationId = "";
-  const chatArea = document.getElementById('chat-area');
-  // Remove all messages except welcome banner
-  const msgs = chatArea.querySelectorAll('.message, .typing-indicator');
-  msgs.forEach(m => m.remove());
-  // Restore welcome banner
+  conversationHistory = [];
+  document.querySelectorAll('.message, .typing-indicator').forEach(el => el.remove());
   const wb = document.getElementById('welcome-banner');
   if (wb) wb.style.display = '';
+  scrollToBottom();
 }
 
-// ─── TOPIC PILLS ─────────────────────────────
-function sendTopicMessage(topic) {
-  document.getElementById('msg-input').value = topic;
+function sendTopicMessage(text) {
+  document.getElementById('msg-input').value = text;
   sendMessage();
 }
 
-// ─── MESSAGING ───────────────────────────────
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 }
-
 function autoResize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function sendMessage() {
-  const input = document.getElementById('msg-input');
-  const text = input.value.trim();
-  if (!text || isTyping) return;
-
-  // Hide welcome banner
-  const wb = document.getElementById('welcome-banner');
-  if (wb) wb.style.display = 'none';
-
-  // Add user message
-  appendMessage('user', escapeHtml(text));
-  conversationHistory.push({ role: 'user', content: text });
-
-  input.value = '';
-  input.style.height = 'auto';
-
-  scrollToBottom();
-  showTyping();
-
-  const userId =
-    currentUser?.uid ||
-    currentUser?.email ||
-    `guest-${Date.now()}`;
-
-  fetch(WORKER_CHAT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: text,
-      conversationId: conversationId,
-      user: userId
-    })
-  })
-    .then(async (response) => {
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.ok) {
-        throw new Error(data?.error || 'Falha ao consultar o Rav.');
-      }
-
-      conversationId = data.conversationId || conversationId;
-      const ravReply = formatRavReply(data.answer || 'O Rav não trouxe resposta desta vez.');
-      hideTyping();
-      appendMessage('rav', ravReply);
-      conversationHistory.push({ role: 'assistant', content: data.answer || '' });
-      scrollToBottom();
-    })
-    .catch((error) => {
-      hideTyping();
-      appendMessage(
-        'rav',
-        `<span style="color:#fca5a5;">Não foi possível falar com o Rav agora.</span><br><span style="color:var(--text-secondary);font-size:0.95em;">${escapeHtml(error.message || 'Erro desconhecido.')}</span>`
-      );
-      scrollToBottom();
-    });
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
 }
 
 function escapeHtml(str) {
@@ -1638,44 +818,44 @@ function escapeHtml(str) {
 }
 
 function formatRavReply(text) {
-  return escapeHtml(text)
-    .replace(/\n{2,}/g, '<br><br>')
-    .replace(/\n/g, '<br>');
+  return escapeHtml(text).replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>');
 }
 
-function appendMessage(role, content) {
-  const chatArea = document.getElementById('chat-area');
-  const now = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+function buildParagraphs(html) {
+  if (html.includes('</p><p>')) return `<p>${html}</p>`;
+  return `<p>${html}</p>`;
+}
 
+function appendMessage(role, contentHtml) {
+  const chatArea = document.getElementById('chat-area');
+  const now = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
   const div = document.createElement('div');
   div.className = `message ${role}`;
 
-  const avatarText = role === 'rav' ? 'רא' : '👤';
-  const metaText   = role === 'rav' ? `RavHaOhr · ${now}` : `Você · ${now}`;
+  const avatar = role === 'rav' ? 'רא' : '👤';
+  const meta = role === 'rav' ? `RavHaOhr · ${now}` : `Você · ${now}`;
 
   div.innerHTML = `
-    <div class="msg-avatar">${avatarText}</div>
+    <div class="msg-avatar">${avatar}</div>
     <div class="msg-bubble">
-      <div class="msg-meta">${metaText}</div>
-      ${content.replace(/\n/g, '<br>')}
+      <div class="msg-meta">${meta}</div>
+      ${buildParagraphs(contentHtml)}
     </div>
   `;
   chatArea.appendChild(div);
+  scrollToBottom();
 }
 
 function showTyping() {
   isTyping = true;
   const chatArea = document.getElementById('chat-area');
-
   const div = document.createElement('div');
   div.className = 'typing-indicator';
   div.id = 'typing-indicator';
-
-  let ti = 0;
   div.innerHTML = `
-    <div class="msg-avatar" style="background:var(--shimmer);box-shadow:0 0 15px var(--accent-glow);font-family:var(--font-hebrew);color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;">רא</div>
+    <div class="msg-avatar" style="background:var(--shimmer);color:#fff;box-shadow:0 0 15px var(--accent-glow);font-family:var(--font-hebrew);">רא</div>
     <div class="typing-bubble">
-      <div class="typing-text" id="typing-text">${RAV_THINKING[0]}</div>
+      <div class="typing-text" id="typing-text">${THINKING_STEPS[0]}</div>
       <div class="typing-dots">
         <div class="typing-dot"></div>
         <div class="typing-dot"></div>
@@ -1686,34 +866,74 @@ function showTyping() {
   chatArea.appendChild(div);
   scrollToBottom();
 
+  let i = 0;
   typingInterval = setInterval(() => {
     const el = document.getElementById('typing-text');
     if (!el) return;
-    el.style.opacity = '0';
-    setTimeout(() => {
-      ti = (ti + 1) % RAV_THINKING.length;
-      el.textContent = RAV_THINKING[ti];
-      el.style.opacity = '1';
-    }, 300);
-  }, 2200);
+    i = (i + 1) % THINKING_STEPS.length;
+    el.textContent = THINKING_STEPS[i];
+  }, 1800);
 }
 
 function hideTyping() {
   isTyping = false;
   clearInterval(typingInterval);
-  const el = document.getElementById('typing-indicator');
-  if (el) el.remove();
+  document.getElementById('typing-indicator')?.remove();
 }
 
-// ─── SCROLL ───────────────────────────────────
+async function sendMessage() {
+  const input = document.getElementById('msg-input');
+  const sendBtn = document.getElementById('send-btn');
+  const text = input.value.trim();
+  if (!text || isTyping) return;
+
+  document.getElementById('welcome-banner')?.style.setProperty('display', 'none');
+  appendMessage('user', escapeHtml(text));
+  conversationHistory.push({ role: 'user', content: text });
+
+  input.value = '';
+  input.style.height = 'auto';
+  sendBtn.disabled = true;
+  showTyping();
+
+  try {
+    const response = await fetch(WORKER_CHAT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        conversationId,
+        user: currentUser?.uid || currentUser?.email || `guest-${Date.now()}`
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.ok) {
+      throw new Error(data?.error || 'Falha ao consultar o Rav.');
+    }
+
+    conversationId = data.conversationId || conversationId;
+    const reply = data.answer || 'O Rav não trouxe resposta desta vez.';
+    hideTyping();
+    appendMessage('rav', formatRavReply(reply));
+    conversationHistory.push({ role: 'assistant', content: reply });
+  } catch (error) {
+    hideTyping();
+    appendMessage('rav', `<span style="color:#fca5a5;">Não foi possível falar com o Rav agora.</span><br><span style="color:var(--text-secondary);font-size:.95em;">${escapeHtml(error.message || 'Erro desconhecido.')}</span>`);
+  } finally {
+    sendBtn.disabled = false;
+    scrollToBottom();
+  }
+}
+
 function scrollToBottom() {
   const ca = document.getElementById('chat-area');
   if (ca) ca.scrollTop = ca.scrollHeight;
 }
 
 (function setupScrollBtn() {
-  window.addEventListener('load', () => {
-    const ca  = document.getElementById('chat-area');
+  addEventListener('load', () => {
+    const ca = document.getElementById('chat-area');
     const btn = document.getElementById('scroll-btn');
     if (!ca || !btn) return;
     ca.addEventListener('scroll', () => {
@@ -1724,115 +944,51 @@ function scrollToBottom() {
 })();
 </script>
 
-<!-- ═══════════════════════════════════════════
-     FIREBASE AUTH MODULE
-     ✏️  Preencha apiKey e appId com os seus valores do Firebase Console
-═══════════════════════════════════════════ -->
 <script type="module">
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getAuth,
-    signInWithPopup,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    updateProfile,
-    GoogleAuthProvider,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  // ─────────────────────────────────────────────────────────────────
-  // ✏️  SUBSTITUA os valores abaixo pelos do seu projeto no Firebase Console
-  //     Firebase Console → Configurações do projeto → Seus apps → Config SDK
-  // ─────────────────────────────────────────────────────────────────
-  const firebaseConfig = {
-    apiKey:            "AIzaSyCbFI4xgkHCw8eY8JRcpOrokOyBpxzDhk0",
-    authDomain:        "ravhaohr.firebaseapp.com",
-    projectId:         "ravhaohr",
-    storageBucket:     "ravhaohr.firebasestorage.app",
-    messagingSenderId: "919621617899",
-    appId:             "1:919621617899:web:f3cc2ac7ac4fc87d9856ae"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyCbFI4xgkHCw8eY8JRcpOrokOyBpxzDhk0",
+  authDomain: "ravhaohr.firebaseapp.com",
+  projectId: "ravhaohr",
+  storageBucket: "ravhaohr.firebasestorage.app",
+  messagingSenderId: "919621617899",
+  appId: "1:919621617899:web:f3cc2ac7ac4fc87d9856ae"
+};
 
-  const app      = initializeApp(firebaseConfig);
-  const auth     = getAuth(app);
-  const provider = new GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-  // ── Observador de estado — detecta login/logout automaticamente ──
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("✅ Logado:", user.email);
-      window.onUserLoggedIn(user);
-    } else {
-      console.log("🔒 Deslogado");
-      window.onUserLoggedOut();
-    }
-  });
+window.logout = async () => {
+  try {
+    await signOut(auth);
+  } finally {
+    window.location.href = "/";
+  }
+};
 
-  // ── Google ────────────────────────────────────────────────────────
-  window.loginWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      // onAuthStateChanged cuida do resto
-    } catch (e) {
-      console.error(e);
-      if (e.code !== 'auth/popup-closed-by-user') {
-        alert("Erro ao entrar com Google. Tente novamente.");
-      }
-    }
-  };
+onAuthStateChanged(auth, async (user) => {
+  const gate = document.getElementById('gate');
+  const gateText = document.getElementById('gate-text');
+  if (!user) {
+    gateText.textContent = "Sessão não encontrada. Redirecionando para o login...";
+    setTimeout(() => { window.location.href = "/"; }, 500);
+    return;
+  }
 
-  // ── E-mail / senha — login ────────────────────────────────────────
-  window.loginWithEmail = async () => {
-    const email = document.getElementById('email-input').value.trim();
-    const pass  = document.getElementById('pass-input').value.trim();
-    if (!email || !pass) { alert('Preencha e-mail e senha.'); return; }
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (e) {
-      console.error(e);
-      const msgs = {
-        'auth/user-not-found':  'E-mail não encontrado.',
-        'auth/wrong-password':  'Senha incorreta.',
-        'auth/invalid-email':   'E-mail inválido.',
-        'auth/invalid-credential': 'Credenciais inválidas. Verifique e-mail e senha.'
-      };
-      alert(msgs[e.code] || 'Erro no login: ' + e.message);
-    }
-  };
+  currentUser = user;
+  const name = user.displayName || user.email?.split('@')[0] || "Buscador da Luz";
+  document.getElementById('wb-greeting').innerHTML =
+    `Shalom, <strong>${escapeHtml(name)}</strong>.<br>Que a luz da Torá ilumine cada palavra que trocarmos.<br>Estou aqui para guiá-lo com sabedoria, amor e verdade.`;
 
-  // ── E-mail / senha — cadastro ─────────────────────────────────────
-  window.registerWithEmail = async () => {
-    const name  = document.getElementById('name-input').value.trim();
-    const email = document.getElementById('reg-email-input').value.trim();
-    const pass  = document.getElementById('reg-pass-input').value.trim();
-    if (!name || !email || !pass) { alert('Preencha todos os campos.'); return; }
-    if (pass.length < 6) { alert('A senha deve ter no mínimo 6 caracteres.'); return; }
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      await updateProfile(cred.user, { displayName: name });
-      // Força atualização do displayName no onAuthStateChanged
-      window.onUserLoggedIn({ ...cred.user, displayName: name });
-    } catch (e) {
-      console.error(e);
-      const msgs = {
-        'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
-        'auth/invalid-email':        'E-mail inválido.',
-        'auth/weak-password':        'Senha fraca. Use ao menos 6 caracteres.'
-      };
-      alert(msgs[e.code] || 'Erro no cadastro: ' + e.message);
-    }
-  };
-
-  // ── Logout ────────────────────────────────────────────────────────
-  window.logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  gate.classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+});
 </script>
 </body>
 </html>
