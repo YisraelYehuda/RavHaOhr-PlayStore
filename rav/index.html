@@ -1704,30 +1704,26 @@ function sendMessage() {
   scrollToBottom();
   showTyping();
 
-  // ── AI INTEGRATION POINT ──────────────────────────────────────────
-  // Replace the mock below with your real API call:
-  //
-  //   const response = await fetch("https://rav-haohr.orhatorabrasil.workers.dev/", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ messages: conversationHistory })
-  //   });
-  //   const data = await response.json();
-  //   const ravReply = data.content[0].text;
-  //   hideTyping();
-  //   appendMessage('rav', ravReply);
-  //   conversationHistory.push({ role: 'assistant', content: ravReply });
-  //
-  // ─────────────────────────────────────────────────────────────────
-
-  // MOCK RESPONSE — remove when integrating real AI
-  setTimeout(() => {
-    hideTyping();
-    const mockReply = `Shalom, buscador da luz.\n\nSua pergunta sobre <em>"${text}"</em> toca um tema profundo na Torá. O RavHaOhr está em fase de integração — em breve esta interface estará conectada à sabedoria completa do Rav.\n\n<span style="font-family:var(--font-hebrew);font-size:1.1em;color:var(--gold);">בָּרוּךְ הַבָּא</span> — Seja bem-vindo a este espaço sagrado.`;
-    appendMessage('rav', mockReply);
-    conversationHistory.push({ role: 'assistant', content: mockReply });
-    scrollToBottom();
-  }, 2800);
+  // ── CLOUDFLARE WORKER — integração real ──────────────────────────
+  (async () => {
+    try {
+      const response = await fetch("https://rav-haohr.orhatorabrasil.workers.dev/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: conversationHistory })
+      });
+      const data = await response.json();
+      const ravReply = data.content[0].text;
+      hideTyping();
+      appendMessage('rav', ravReply);
+      conversationHistory.push({ role: 'assistant', content: ravReply });
+      scrollToBottom();
+    } catch (e) {
+      hideTyping();
+      appendMessage('rav', 'Houve um erro ao consultar o Rav. Verifique sua conexão e tente novamente.');
+      console.error(e);
+    }
+  })();
 }
 
 function appendMessage(role, content) {
