@@ -1685,7 +1685,7 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
-function sendMessage() {
+async function sendMessage() {
   const input = document.getElementById('msg-input');
   const text  = input.value.trim();
   if (!text || isTyping) return;
@@ -1705,25 +1705,42 @@ function sendMessage() {
   showTyping();
 
   // ── CLOUDFLARE WORKER — integração real ──────────────────────────
-  (async () => {
-    try {
-      const response = await fetch("https://rav-haohr.orhatorabrasil.workers.dev/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: conversationHistory })
-      });
-      const data = await response.json();
-      const ravReply = data.content[0].text;
-      hideTyping();
-      appendMessage('rav', ravReply);
-      conversationHistory.push({ role: 'assistant', content: ravReply });
-      scrollToBottom();
-    } catch (e) {
-      hideTyping();
-      appendMessage('rav', 'Houve um erro ao consultar o Rav. Verifique sua conexão e tente novamente.');
-      console.error(e);
+  try {
+    const response = await fetch("https://rav-haohr.orhatorabrasil.workers.dev/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: conversationHistory })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
-  })();
+
+    const data = await response.json();
+
+    // Suporta diferentes formatos de resposta do Worker
+    let ravReply = '';
+    if (data.content && data.content[0] && data.content[0].text) {
+      ravReply = data.content[0].text;
+    } else if (data.text) {
+      ravReply = data.text;
+    } else if (data.reply) {
+      ravReply = data.reply;
+    } else if (typeof data === 'string') {
+      ravReply = data;
+    } else {
+      ravReply = JSON.stringify(data);
+    }
+
+    hideTyping();
+    appendMessage('rav', ravReply);
+    conversationHistory.push({ role: 'assistant', content: ravReply });
+    scrollToBottom();
+  } catch (e) {
+    hideTyping();
+    appendMessage('rav', 'Houve um erro ao consultar o Rav. Verifique sua conexão e tente novamente.');
+    console.error('Worker error:', e);
+  }
 }
 
 function appendMessage(role, content) {
