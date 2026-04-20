@@ -1503,7 +1503,6 @@ const RAV_THINKING = [
 let currentUser = null;
 let isTyping = false;
 let conversationHistory = [];
-let difyConversationId = '';  // Dify mantém contexto por conversationId
 let typingInterval = null;
 
 // ─── THEME AUTO-DETECTION ─────────────────────
@@ -1666,7 +1665,6 @@ function closeNewConvModal() {
 function startNewConversation() {
   closeNewConvModal();
   conversationHistory = [];
-  difyConversationId = '';
   const chatArea = document.getElementById('chat-area');
   const msgs = chatArea.querySelectorAll('.message, .typing-indicator');
   msgs.forEach(m => m.remove());
@@ -1693,6 +1691,8 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
+const API_URL = "https://rav-ohr.orhatorabrasil.workers.dev/chat";
+
 async function sendMessage() {
   const input = document.getElementById('msg-input');
   const text  = input.value.trim();
@@ -1710,42 +1710,34 @@ async function sendMessage() {
   scrollToBottom();
   showTyping();
 
-  // ── DIFY via Cloudflare Worker ────────────────────────────────────
   try {
-    const userId = (currentUser && currentUser.uid) ? currentUser.uid : 'anon-user';
-
-    const response = await fetch(" fetch("https://rav-ohr.orhatorabrasil.workers.dev/chat", {  ", {
+    const response = await fetch(API_URL, {
       method: "POST",
-      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: text,
-        conversationId: difyConversationId,
-        user: userId
+        conversationId: "",
+        user: "user"
       })
     });
 
     const data = await response.json();
 
-    if (!response.ok) {
-      console.error('Worker respondeu erro:', response.status, data);
-      throw new Error(data.error || `HTTP ${response.status}`);
+    if (!data.ok) {
+      throw new Error(data.error || "Erro desconhecido");
     }
 
-    // Salva conversationId para manter contexto Dify
-    if (data.conversationId) difyConversationId = data.conversationId;
-
-    const ravReply = data.answer || 'O Rav não retornou resposta. Tente novamente.';
+    const ravReply = data.answer;
 
     hideTyping();
     appendMessage('rav', ravReply);
     conversationHistory.push({ role: 'assistant', content: ravReply });
     scrollToBottom();
 
-  } catch (e) {
+  } catch (err) {
     hideTyping();
-    console.error('Worker error completo:', e);
-    appendMessage('rav', `Erro de conexão com o Rav: ${e.message}. Verifique sua conexão e tente novamente.`);
+    console.error("Erro:", err);
+    appendMessage('rav', "Erro ao conectar com o Rav. Tente novamente.");
   }
 }
 
