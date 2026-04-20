@@ -1685,7 +1685,7 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
-async function sendMessage() {
+function sendMessage() {
   const input = document.getElementById('msg-input');
   const text  = input.value.trim();
   if (!text || isTyping) return;
@@ -1704,43 +1704,30 @@ async function sendMessage() {
   scrollToBottom();
   showTyping();
 
-  // ── CLOUDFLARE WORKER — integração real ──────────────────────────
-  try {
-    const response = await fetch("https://rav-haohr.orhatorabrasil.workers.dev/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: conversationHistory })
-    });
+  // ── AI INTEGRATION POINT ──────────────────────────────────────────
+  // Replace the mock below with your real API call:
+  //
+  //   const response = await fetch("https://rav-haohr.orhatorabrasil.workers.dev/", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ messages: conversationHistory })
+  //   });
+  //   const data = await response.json();
+  //   const ravReply = data.content[0].text;
+  //   hideTyping();
+  //   appendMessage('rav', ravReply);
+  //   conversationHistory.push({ role: 'assistant', content: ravReply });
+  //
+  // ─────────────────────────────────────────────────────────────────
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Suporta diferentes formatos de resposta do Worker
-    let ravReply = '';
-    if (data.content && data.content[0] && data.content[0].text) {
-      ravReply = data.content[0].text;
-    } else if (data.text) {
-      ravReply = data.text;
-    } else if (data.reply) {
-      ravReply = data.reply;
-    } else if (typeof data === 'string') {
-      ravReply = data;
-    } else {
-      ravReply = JSON.stringify(data);
-    }
-
+  // MOCK RESPONSE — remove when integrating real AI
+  setTimeout(() => {
     hideTyping();
-    appendMessage('rav', ravReply);
-    conversationHistory.push({ role: 'assistant', content: ravReply });
+    const mockReply = `Shalom, buscador da luz.\n\nSua pergunta sobre <em>"${text}"</em> toca um tema profundo na Torá. O RavHaOhr está em fase de integração — em breve esta interface estará conectada à sabedoria completa do Rav.\n\n<span style="font-family:var(--font-hebrew);font-size:1.1em;color:var(--gold);">בָּרוּךְ הַבָּא</span> — Seja bem-vindo a este espaço sagrado.`;
+    appendMessage('rav', mockReply);
+    conversationHistory.push({ role: 'assistant', content: mockReply });
     scrollToBottom();
-  } catch (e) {
-    hideTyping();
-    appendMessage('rav', 'Houve um erro ao consultar o Rav. Verifique sua conexão e tente novamente.');
-    console.error('Worker error:', e);
-  }
+  }, 2800);
 }
 
 function appendMessage(role, content) {
@@ -1821,11 +1808,11 @@ function closeQuizModal() {
 }
 
 const QUIZ_PROMPTS = {
-  iniciante:      'Quiz de estudo — nível INICIANTE. Faça uma pergunta sobre judaísmo básico com 4 opções (A, B, C, D). Aguarde minha resposta antes de continuar.',
-  amador:         'Quiz de estudo — nível AMADOR. Faça uma pergunta sobre Torá, Halachá ou história judaica com 4 opções (A, B, C, D). Aguarde minha resposta antes de continuar.',
-  intermediario:  'Quiz de estudo — nível INTERMEDIÁRIO. Faça uma pergunta desafiadora sobre Halachá, Talmud ou Chassidut com 4 opções (A, B, C, D). Aguarde minha resposta antes de continuar.',
-  avancado:       'Quiz de estudo — nível AVANÇADO. Faça uma pergunta profunda sobre Gemara, Kabbalá ou Shulchan Aruch com 4 opções (A, B, C, D). Aguarde minha resposta antes de continuar.',
-  talmid_chacham: 'Quiz de estudo — nível TALMID CHACHAM. Faça uma pergunta de elite sobre Talmud Bavli, Rishonim ou Kabbalat HaAri com 4 opções (A, B, C, D). Aguarde minha resposta antes de continuar.'
+  iniciante:      'Vou preparar um quiz de nível INICIANTE para você. Faça perguntas simples e acessíveis sobre os conceitos básicos do judaísmo — Shabbat, as festas, as mitzvot básicas, os patriarcas. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e então corrija com ensinamento. Comece agora com a primeira pergunta.',
+  amador:         'Vou preparar um quiz de nível AMADOR para você. Faça perguntas sobre Halachá básica, Torá, Parashiot, e história judaica. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com ensinamento. Comece agora com a primeira pergunta.',
+  intermediario:  'Vou preparar um quiz de nível INTERMEDIÁRIO para você. Faça perguntas desafiadoras sobre Halachá, Talmud, Rambam, Moadim e conceitos de Chassidut. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com profundidade. Comece agora com a primeira pergunta.',
+  avancado:       'Vou preparar um quiz de nível AVANÇADO para você. Faça perguntas profundas sobre Gemara, Kabbalá, Zohar, Shulchan Aruch e filosofia judaica. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com análise profunda. Comece agora com a primeira pergunta.',
+  talmid_chacham: 'Vou preparar um quiz de nível TALMID CHACHAM para você. Faça perguntas de elite sobre sugyot do Talmud Bavli, machlokot de Rishonim, Acharonim, Kabbalat HaAri, e psak halachá em casos complexos. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com erudição máxima. Comece agora com a primeira pergunta.'
 };
 
 function startQuiz(level) {
