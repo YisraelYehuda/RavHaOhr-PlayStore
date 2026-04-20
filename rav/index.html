@@ -1724,24 +1724,29 @@ async function sendMessage() {
       })
     });
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Erro HTTP ${response.status}`);
+    }
 
     const data = await response.json();
 
-    // Salva conversationId para manter contexto Dify
-    if (data.conversationId) difyConversationId = data.conversationId;
-
-    const ravReply = data.answer || 'O Rav não retornou resposta. Tente novamente.';
-
-    hideTyping();
-    appendMessage('rav', ravReply);
-    conversationHistory.push({ role: 'assistant', content: ravReply });
+    if (data.ok) {
+      if (data.conversationId) difyConversationId = data.conversationId;
+      const ravReply = data.answer || 'O Rav está em silêncio no momento. Tente novamente.';
+      
+      hideTyping();
+      appendMessage('rav', ravReply);
+      conversationHistory.push({ role: 'assistant', content: ravReply });
+    } else {
+      throw new Error(data.error || 'Erro desconhecido na resposta do Rav');
+    }
     scrollToBottom();
 
   } catch (e) {
     hideTyping();
-    appendMessage('rav', 'Houve um erro ao consultar o Rav. Verifique sua conexão e tente novamente.');
     console.error('Worker error:', e);
+    appendMessage('rav', `O Rav responde que houve um erro de conexão: ${e.message}. Por favor, tente novamente em instantes.`);
   }
 }
 
