@@ -1082,28 +1082,6 @@ body.night-mode .input-bar {
   #app { max-width: 600px; margin: 0 auto; }
   #login .login-card { padding: 52px 48px; }
 }
-
-/* Quiz level buttons */
-.quiz-level-btn {
-  width: 100%;
-  padding: 12px 16px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-secondary);
-  font-family: var(--font-text);
-  font-size: 0.95rem;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s ease;
-  line-height: 1.4;
-}
-.quiz-level-btn:hover {
-  background: rgba(255,255,255,0.09);
-  border-color: var(--accent-light);
-  color: var(--text-primary);
-  transform: translateX(4px);
-}
 </style>
 </head>
 <body>
@@ -1195,13 +1173,6 @@ body.night-mode .input-bar {
     </div>
 
     <div class="login-version">RavHaOhr v1.0 · Criado por Yisrael Yehuda · 5785</div>
-    <div style="text-align:center;margin-top:10px;">
-      <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
-         style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
-         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
-        🔐 Política de Privacidade
-      </a>
-    </div>
   </div>
 </div>
 
@@ -1256,7 +1227,6 @@ body.night-mode .input-bar {
         <span class="topic-pill" onclick="sendTopicMessage('Shabbat e festividades')">🕯 Shabbat</span>
         <span class="topic-pill" onclick="sendTopicMessage('Parnassá e Mussar')">💎 Mussar</span>
         <span class="topic-pill" onclick="sendTopicMessage('Processo de Giyur')">🌟 Giyur</span>
-        <span class="topic-pill" onclick="openQuizModal()" style="border-color:var(--gold);color:var(--gold);">📜 Quiz da Torá</span>
       </div>
       <div class="wb-dev-notice">
         <p>
@@ -1320,13 +1290,6 @@ body.night-mode .input-bar {
         Iniciar um novo diálogo com o Rav
       </div>
     </div>
-    <div class="drawer-item" onclick="toggleDrawer(); openQuizModal();">
-      <span class="di-icon">📜</span>
-      <div class="di-text">
-        <strong>Quiz da Torá</strong>
-        Teste seus conhecimentos com o Rav
-      </div>
-    </div>
     <div class="drawer-item" onclick="logout(); toggleDrawer();">
       <span class="di-icon">→</span>
       <div class="di-text">
@@ -1352,38 +1315,6 @@ body.night-mode .input-bar {
         Conteúdo judaico em português
       </div>
     </a>
-  </div>
-
-  <div class="drawer-section">
-    <div class="drawer-title">Legal & Segurança</div>
-    <div style="padding: 14px 14px 4px; display:flex; flex-direction:column; gap:10px;">
-      <div style="display:flex;align-items:flex-start;gap:10px;">
-        <span style="font-size:1.1rem;margin-top:2px;">🔐</span>
-        <div>
-          <p style="font-family:var(--font-display);font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-primary);margin-bottom:6px;">Política de Privacidade</p>
-          <p style="font-family:var(--font-text);font-size:0.85rem;color:var(--text-secondary);line-height:1.65;">
-            Coletamos apenas <strong style="color:var(--text-primary);">nome e e-mail</strong> para autenticação. As conversas com o Rav são <strong style="color:var(--text-primary);">anônimas e não armazenadas</strong> em seu perfil. Utilizamos <strong style="color:var(--text-primary);">Firebase</strong> e <strong style="color:var(--text-primary);">Cloudflare Workers</strong> com criptografia HTTPS/TLS. Nenhum dado é vendido ou usado para publicidade.
-          </p>
-          <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
-             style="display:inline-block;margin-top:10px;font-family:var(--font-display);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-light);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color 0.2s,border-color 0.2s;"
-             onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'"
-             onmouseout="this.style.color='var(--accent-light)';this.style.borderColor='var(--border)'">
-            Ler política completa →
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="drawer-section">
-    <div class="drawer-title">Conta</div>
-    <div class="drawer-item" onclick="toggleDrawer(); askDeleteAccount();" style="color:var(--text-secondary);">
-      <span class="di-icon" style="color:#e05555;">⚠</span>
-      <div class="di-text">
-        <strong style="color:#e05555;">Excluir Minha Conta</strong>
-        Exclusão permanente dos dados
-      </div>
-    </div>
   </div>
 
   <div class="drawer-section">
@@ -1415,56 +1346,8 @@ body.night-mode .input-bar {
 </div>
 
 <!-- ═══════════════════════════════════════════
-     DELETE ACCOUNT MODAL
+     JAVASCRIPT
 ═══════════════════════════════════════════ -->
-<div class="modal-overlay" id="delete-account-modal">
-  <div class="modal-card">
-    <div class="modal-icon">⚠️</div>
-    <div class="modal-title" style="color:#e05555;">Excluir Conta Permanentemente?</div>
-    <p class="modal-text">
-      Esta ação é <strong style="color:#e05555;">irreversível</strong>. Todos os seus dados vinculados a esta conta serão removidos permanentemente dos nossos servidores Firebase.<br><br>
-      <em style="font-size:0.82rem;color:var(--text-muted);">Nenhuma informação poderá ser recuperada após a confirmação.</em>
-    </p>
-    <div class="modal-actions">
-      <button class="modal-btn cancel" onclick="closeDeleteModal()">Cancelar</button>
-      <button class="modal-btn" onclick="confirmDeleteAccount()"
-        style="background:linear-gradient(135deg,#c0392b,#e74c3c);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(192,57,43,0.4);">
-        Excluir Conta
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     QUIZ MODAL
-═══════════════════════════════════════════ -->
-<div class="modal-overlay" id="quiz-modal">
-  <div class="modal-card" style="max-width:400px;">
-    <div class="modal-icon">📜</div>
-    <div class="modal-title">Quiz com o RavHaOhr</div>
-    <p class="modal-text">
-      Escolha seu nível de conhecimento e o Rav irá prepará-lo com perguntas para fortalecer seu estudo da Torá.
-    </p>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;">
-      <button class="quiz-level-btn" onclick="startQuiz('iniciante')">
-        🌱 <strong>Iniciante</strong> — Primeiros passos na Torá
-      </button>
-      <button class="quiz-level-btn" onclick="startQuiz('amador')">
-        ✡ <strong>Amador</strong> — Conhecimento básico consolidado
-      </button>
-      <button class="quiz-level-btn" onclick="startQuiz('intermediario')">
-        📖 <strong>Intermediário</strong> — Halachá e conceitos avançados
-      </button>
-      <button class="quiz-level-btn" onclick="startQuiz('avancado')">
-        🔥 <strong>Avançado</strong> — Talmud, Kabbalá, Mussar profundo
-      </button>
-      <button class="quiz-level-btn" onclick="startQuiz('talmid_chacham')" style="border-color:var(--gold);color:var(--gold-light);">
-        👑 <strong>Talmid Chacham</strong> — Para os grandes estudiosos
-      </button>
-    </div>
-    <button class="modal-btn cancel" onclick="closeQuizModal()" style="width:100%;">Cancelar</button>
-  </div>
-</div>
 <script>
 // ─── CONSTANTS ───────────────────────────────
 const SPLASH_DURATION = 7000;
@@ -1798,64 +1681,6 @@ function scrollToBottom() {
   if (ca) ca.scrollTop = ca.scrollHeight;
 }
 
-// ─── QUIZ ─────────────────────────────────────
-function openQuizModal() {
-  document.getElementById('quiz-modal').classList.add('open');
-}
-
-function closeQuizModal() {
-  document.getElementById('quiz-modal').classList.remove('open');
-}
-
-const QUIZ_PROMPTS = {
-  iniciante:      'Vou preparar um quiz de nível INICIANTE para você. Faça perguntas simples e acessíveis sobre os conceitos básicos do judaísmo — Shabbat, as festas, as mitzvot básicas, os patriarcas. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e então corrija com ensinamento. Comece agora com a primeira pergunta.',
-  amador:         'Vou preparar um quiz de nível AMADOR para você. Faça perguntas sobre Halachá básica, Torá, Parashiot, e história judaica. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com ensinamento. Comece agora com a primeira pergunta.',
-  intermediario:  'Vou preparar um quiz de nível INTERMEDIÁRIO para você. Faça perguntas desafiadoras sobre Halachá, Talmud, Rambam, Moadim e conceitos de Chassidut. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com profundidade. Comece agora com a primeira pergunta.',
-  avancado:       'Vou preparar um quiz de nível AVANÇADO para você. Faça perguntas profundas sobre Gemara, Kabbalá, Zohar, Shulchan Aruch e filosofia judaica. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com análise profunda. Comece agora com a primeira pergunta.',
-  talmid_chacham: 'Vou preparar um quiz de nível TALMID CHACHAM para você. Faça perguntas de elite sobre sugyot do Talmud Bavli, machlokot de Rishonim, Acharonim, Kabbalat HaAri, e psak halachá em casos complexos. Apresente uma pergunta por vez com 4 opções (A, B, C, D), aguarde a resposta e corrija com erudição máxima. Comece agora com a primeira pergunta.'
-};
-
-function startQuiz(level) {
-  closeQuizModal();
-  const prompt = QUIZ_PROMPTS[level];
-  document.getElementById('msg-input').value = prompt;
-  sendMessage();
-}
-
-// ─── DELETE ACCOUNT ───────────────────────────
-function askDeleteAccount() {
-  document.getElementById('delete-account-modal').classList.add('open');
-}
-
-function closeDeleteModal() {
-  document.getElementById('delete-account-modal').classList.remove('open');
-}
-
-async function confirmDeleteAccount() {
-  closeDeleteModal();
-  try {
-    // Delete Firebase user if auth is available
-    if (typeof firebase !== 'undefined' || window._firebaseAuth) {
-      const auth = window._firebaseAuth;
-      if (auth && auth.currentUser) {
-        await auth.currentUser.delete();
-      }
-    }
-    // Fallback: just sign out and notify user
-    alert('Sua conta foi excluída permanentemente. Lamentamos ver você partir. Que HaShem abençoe seu caminho.');
-    if (typeof window.logout === 'function') window.logout();
-  } catch(e) {
-    console.error(e);
-    // If re-authentication needed
-    if (e.code === 'auth/requires-recent-login') {
-      alert('Por segurança, faça login novamente antes de excluir sua conta. Entre em contato com orhatorabrasil@gmail.com se precisar de ajuda.');
-    } else {
-      alert('Para excluir sua conta, entre em contato com: orhatorabrasil@gmail.com');
-    }
-    if (typeof window.logout === 'function') window.logout();
-  }
-}
-
 (function setupScrollBtn() {
   window.addEventListener('load', () => {
     const ca  = document.getElementById('chat-area');
@@ -1892,13 +1717,12 @@ async function confirmDeleteAccount() {
   //     Firebase Console → Configurações do projeto → Seus apps → Config SDK
   // ─────────────────────────────────────────────────────────────────
   const firebaseConfig = {
-    apiKey:            "AIzaSyCbFI4xgkHCw8eY8JRcpOrokOyBpxzDhk0",
-    authDomain:        "ravhaohr.firebaseapp.com",
-    projectId:         "ravhaohr",
-    storageBucket:     "ravhaohr.firebasestorage.app",
+    apiKey:            "SUA_API_KEY",           // ← substituir
+    authDomain:        "ravhaorh.firebaseapp.com",
+    projectId:         "ravhaorh",
+    storageBucket:     "ravhaorh.appspot.com",
     messagingSenderId: "919621617899",
-    appId:             "1:919621617899:web:f3cc2ac7ac4fc87d9856ae",
-    measurementId:     "G-E5HYDV7YN2"
+    appId:             "SEU_APP_ID"             // ← substituir
   };
 
   const app      = initializeApp(firebaseConfig);
