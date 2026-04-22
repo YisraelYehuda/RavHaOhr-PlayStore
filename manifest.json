@@ -1,12 +1,15 @@
 {
-  "name": "RavHaOhr — אור הרב",
+  "name": "RavHaOhr — O Rabino da Luz",
   "short_name": "RavHaOhr",
-  "description": "App RavHaOhr — אור הרב",
-  "start_url": "index.html",
+  "description": "RavHaOhr — Sabedoria judaica ortodoxa em português. Converse com o Rav e aprofunde seu conhecimento da Torá.",
+  "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#060d1f",
   "theme_color": "#060d1f",
-  "orientation": "portrait",
+  "lang": "pt-BR",
+  "scope": "/",
+  "categories": ["education", "lifestyle"],
   "icons": [
     {
       "src": "icon-192.png",
@@ -20,5 +23,8 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false
 }
