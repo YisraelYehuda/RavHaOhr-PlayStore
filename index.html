@@ -1,284 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rav HaOhr — Login</title>
-  <style>
-    :root{
-      --bg:#07111f;
-      --bg2:#0d1b31;
-      --card:rgba(13,27,49,.92);
-      --line:rgba(86,125,194,.28);
-      --text:#edf4ff;
-      --muted:#9eb2d8;
-      --accent:#2f6df6;
-      --accent2:#1f52c7;
-      --gold:#d9b24c;
-      --ok:#22c55e;
-      --err:#ef4444;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family:Arial, Helvetica, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top, rgba(47,109,246,.2), transparent 35%),
-        linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-    }
-    .card{
-      width:100%;
-      max-width:460px;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:28px 20px 22px;
-      box-shadow:0 24px 60px rgba(0,0,0,.42);
-      backdrop-filter: blur(10px);
-    }
-    .logo{text-align:center;margin-bottom:16px}
-    .logo-he{font-size:2rem;font-weight:700;color:var(--gold);margin-bottom:4px}
-    .logo-pt{font-size:1.2rem;font-weight:700;letter-spacing:.04em}
-    .sub{text-align:center;color:var(--muted);line-height:1.5;margin-bottom:18px}
-    .btn{
-      width:100%;
-      border:none;
-      border-radius:14px;
-      padding:14px 16px;
-      font-size:1rem;
-      font-weight:700;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-    .btn-google{
-      background:#fff;color:#111827;
-      display:flex;align-items:center;justify-content:center;gap:10px;
-      margin-bottom:16px;
-    }
-    .btn-primary{background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fff}
-    .sep{
-      display:flex;align-items:center;gap:10px;
-      margin:16px 0;color:var(--muted);font-size:.88rem;
-    }
-    .sep:before,.sep:after{content:"";flex:1;height:1px;background:var(--line)}
-    .field{margin-bottom:12px}
-    .field label{display:block;color:var(--muted);font-size:.9rem;margin-bottom:6px}
-    .field input{
-      width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);
-      background:#0a1527;color:var(--text);font-size:1rem;outline:none;
-    }
-    .field input:focus{border-color:#4c88ff;box-shadow:0 0 0 3px rgba(76,136,255,.14)}
-    .toggle{text-align:center;color:var(--muted);font-size:.92rem;margin-top:12px}
-    .toggle a{color:#8bb4ff;text-decoration:none;font-weight:700;cursor:pointer}
-    .status{min-height:22px;text-align:center;font-size:.92rem;margin-top:14px;color:var(--muted)}
-    .status.ok{color:var(--ok)}
-    .status.err{color:var(--err)}
-    .hidden{display:none}
-    .version{text-align:center;margin-top:16px;color:#788cb2;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rav HaOhr ✨</title>
+
+<style>
+:root{
+    --bg:#07111f;
+    --bg2:#0d1b31;
+    --card:rgba(13,27,49,.92);
+    --line:rgba(86,125,194,.28);
+    --text:#edf4ff;
+    --muted:#9eb2d8;
+    --accent:#2f6df6;
+    --accent2:#1f52c7;
+    --gold:#d9b24c;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    color:var(--text);
+    background:
+      radial-gradient(circle at top, rgba(47,109,246,.22), transparent 35%),
+      linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:470px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:30px 24px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+    text-align:center;
+    backdrop-filter: blur(10px);
+}
+
+.rav-img{
+    width:140px;
+    height:140px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid var(--gold);
+    box-shadow:0 0 25px rgba(217,178,76,.35);
+    margin-bottom:18px;
+}
+
+.logo-he{
+    font-size:2.2rem;
+    color:var(--gold);
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.logo-pt{
+    font-size:1.5rem;
+    font-weight:bold;
+    margin-bottom:14px;
+}
+
+.subtitle{
+    color:var(--muted);
+    line-height:1.6;
+    margin-bottom:24px;
+    font-size:1rem;
+}
+
+.highlight{
+    color:var(--gold);
+    font-weight:bold;
+}
+
+.btn{
+    display:block;
+    width:100%;
+    text-decoration:none;
+    background:linear-gradient(180deg,var(--accent),var(--accent2));
+    color:white;
+    padding:15px;
+    border-radius:14px;
+    font-size:1rem;
+    font-weight:bold;
+    transition:.2s;
+    margin-top:14px;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.features{
+    margin-top:26px;
+    text-align:left;
+    color:var(--muted);
+    line-height:1.9;
+    font-size:.95rem;
+}
+
+.footer{
+    margin-top:22px;
+    font-size:.8rem;
+    color:#7f93ba;
+}
+</style>
 </head>
 <body>
-  <div class="card">
-    <div class="logo">
-      <div class="logo-he">רַב הָאוֹר</div>
-      <div class="logo-pt">Rav HaOhr</div>
-    </div>
-    <div class="sub">
-      Faça login para entrar no Rav e acessar a área protegida.
-    </div>
 
-    <button class="btn btn-google" id="googleBtn" onclick="loginGoogle()">
-      <span>🔐</span><span>Entrar com Google</span>
-    </button>
+<div class="card">
 
-    <div class="sep">ou</div>
+    <img src="rav.png" class="rav-img" alt="Rav HaOhr">
 
-    <div id="loginBox">
-      <div class="field">
-        <label for="email">E-mail</label>
-        <input id="email" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label for="password">Senha</label>
-        <input id="password" type="password" placeholder="Digite sua senha" autocomplete="current-password">
-      </div>
-      <button class="btn btn-primary" id="emailLoginBtn" onclick="loginEmail()">Entrar com e-mail</button>
-      <div class="toggle">Ainda não tem conta? <a onclick="showRegister()">Criar conta</a></div>
+    <div class="logo-he">רַב הָאוֹר</div>
+    <div class="logo-pt">Rav HaOhr ✨</div>
+
+    <div class="subtitle">
+        Receba <span class="highlight">orientação judaica personalizada</span><br>
+        sobre <span class="highlight">Torá, Halachá e Talmud</span><br>
+        de forma rápida, profunda e inteligente.
     </div>
 
-    <div id="registerBox" class="hidden">
-      <div class="field">
-        <label for="name">Nome</label>
-        <input id="name" type="text" placeholder="Seu nome">
-      </div>
-      <div class="field">
-        <label for="regEmail">E-mail</label>
-        <input id="regEmail" type="email" placeholder="seuemail@gmail.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label for="regPassword">Senha</label>
-        <input id="regPassword" type="password" placeholder="Crie uma senha (mínimo 6)" autocomplete="new-password">
-      </div>
-      <button class="btn btn-primary" id="registerBtn" onclick="registerEmail()">Criar conta</button>
-      <div class="toggle">Já tem conta? <a onclick="showLogin()">Entrar</a></div>
+    <a href="/rav.html" class="btn">📖 Entrar no Rav</a>
+
+    <div class="features">
+        ✨ Sabedoria baseada na Torá<br>
+        📜 Respostas rápidas e profundas<br>
+        🕍 Orientação espiritual judaica<br>
+        🇮🇱 Conhecimento ao seu alcance
     </div>
 
-    <div class="status" id="status">Aguardando autenticação…</div>
-    <div class="version">Cloudflare Pages · Firebase Auth</div>
-  </div>
+    <div class="footer">
+        Desenvolvido com sabedoria • Rav HaOhr
+    </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      updateProfile,
-      onAuthStateChanged,
-      browserLocalPersistence,
-      setPersistence
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+</div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCbFI4xgkHCw8eY8JRcpOrokOyBpxzDhk0",
-      authDomain: "ravhaohr.firebaseapp.com",
-      projectId: "ravhaohr",
-      storageBucket: "ravhaohr.firebasestorage.app",
-      messagingSenderId: "919621617899",
-      appId: "1:919621617899:web:f3cc2ac7ac4fc87d9856ae",
-      measurementId: "G-E5HYDV7YN2"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-
-    const statusEl = document.getElementById("status");
-    const buttons = [
-      document.getElementById("googleBtn"),
-      document.getElementById("emailLoginBtn"),
-      document.getElementById("registerBtn")
-    ];
-
-    function setStatus(text, kind=""){
-      statusEl.textContent = text;
-      statusEl.className = "status" + (kind ? " " + kind : "");
-    }
-    function lockUI(locked){
-      buttons.forEach(btn => btn && (btn.disabled = locked));
-    }
-    function goToRav(){
-      window.location.href = "/rav";
-    }
-
-    window.showRegister = function(){
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("registerBox").classList.remove("hidden");
-      setStatus("Crie sua conta para acessar o Rav.");
-    }
-
-    window.showLogin = function(){
-      document.getElementById("registerBox").classList.add("hidden");
-      document.getElementById("loginBox").classList.remove("hidden");
-      setStatus("Entre com Google ou e-mail.");
-    }
-
-    function handleAuthError(error){
-      console.error(error);
-      const map = {
-        "auth/unauthorized-domain": "Domínio não autorizado no Firebase.",
-        "auth/popup-blocked": "O navegador bloqueou o login.",
-        "auth/popup-closed-by-user": "O login foi fechado antes de terminar.",
-        "auth/invalid-credential": "Credenciais inválidas.",
-        "auth/user-not-found": "E-mail não encontrado.",
-        "auth/wrong-password": "Senha incorreta.",
-        "auth/email-already-in-use": "Este e-mail já está em uso.",
-        "auth/invalid-email": "E-mail inválido.",
-        "auth/weak-password": "Senha fraca. Use pelo menos 6 caracteres."
-      };
-      setStatus(map[error.code] || ("Erro: " + (error.message || error.code)), "err");
-    }
-
-    await setPersistence(auth, browserLocalPersistence);
-
-    window.loginGoogle = async function(){
-      try{
-        lockUI(true);
-        setStatus("Abrindo autenticação Google…");
-        await signInWithPopup(auth, provider);
-        setStatus("Login concluído. Entrando no Rav…", "ok");
-        goToRav();
-      }catch(error){
-        lockUI(false);
-        handleAuthError(error);
-      }
-    }
-
-    window.loginEmail = async function(){
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      if(!email || !password){
-        setStatus("Preencha e-mail e senha.", "err");
-        return;
-      }
-      try{
-        lockUI(true);
-        setStatus("Entrando com e-mail…");
-        await signInWithEmailAndPassword(auth, email, password);
-        goToRav();
-      }catch(error){
-        lockUI(false);
-        handleAuthError(error);
-      }
-    }
-
-    window.registerEmail = async function(){
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
-      const password = document.getElementById("regPassword").value.trim();
-
-      if(!name || !email || !password){
-        setStatus("Preencha nome, e-mail e senha.", "err");
-        return;
-      }
-      if(password.length < 6){
-        setStatus("A senha precisa ter pelo menos 6 caracteres.", "err");
-        return;
-      }
-
-      try{
-        lockUI(true);
-        setStatus("Criando sua conta…");
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-        goToRav();
-      }catch(error){
-        lockUI(false);
-        handleAuthError(error);
-      }
-    }
-    lockUI(false);
-
-
-    onAuthStateChanged(auth, (user) => {
-      if(user){
-        setStatus("Sessão ativa. Entrando no Rav…", "ok");
-        goToRav();
-      }else{
-        setStatus("Entre com Google ou e-mail.");
-      }
-    });
-  </script>
 </body>
 </html>
