@@ -1521,7 +1521,20 @@ body.night-mode .input-bar {
       </div>
     </div>
 
-    <div class="login-version">RavHaOhr v1.0 · Criado por Yisrael Yehuda · 5785</div>
+    <div class="login-sep" style="margin-top:20px;">
+      <span></span>
+      <em>ou</em>
+      <span></span>
+    </div>
+
+    <button class="btn-google" onclick="loginAsGuest()" style="opacity:0.75;margin-bottom:4px;">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      Continuar como Convidado
+    </button>
+
+    <div class="login-version">RavHaOhr v1.0 · Criado por Yisrael Yehuda · 5786</div>
     <div style="text-align:center;margin-top:10px;">
       <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
          style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
@@ -1774,7 +1787,7 @@ body.night-mode .input-bar {
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
     <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v1.0 &nbsp;·&nbsp; 5785 &nbsp;·&nbsp; Em desenvolvimento ativo
+      RavHaOhr v1.0 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
     </p>
   </div>
 </div>
@@ -2166,6 +2179,11 @@ function toggleRegister() {
   const rf = document.getElementById('register-form');
   lf.classList.toggle('hidden');
   rf.classList.toggle('hidden');
+}
+
+function loginAsGuest() {
+  const guestUser = { displayName: 'Convidado', email: null, isGuest: true };
+  onUserLoggedIn(guestUser);
 }
 
 // ─── DRAWER ────────────────────────────────────
