@@ -10,7 +10,7 @@
 
 <style>
 /* ============================================================
-   THEME SYSTEM — Day (blue) / Night (gold)
+   THEME SYSTEM — Auto (day/night) + Manual themes
    ============================================================ */
 :root {
   --bg-primary: #060d1f;
@@ -18,6 +18,7 @@
   --bg-card: #0d1e3a;
   --bg-message-user: #0f2347;
   --bg-message-rav: rgba(13,26,58,0.7);
+  --bg-sidebar: #07101f;
   --accent: #2563c7;
   --accent-light: #3b82f6;
   --accent-glow: rgba(37,99,199,0.35);
@@ -36,12 +37,15 @@
   --font-text: 'EB Garamond', serif;
   --star-color: rgba(37,99,199,0.6);
   --shimmer: linear-gradient(135deg, var(--accent) 0%, #1a4a9a 50%, var(--accent-light) 100%);
+  --sidebar-w: 280px;
 }
 
+/* Night (auto) */
 body.night-mode {
   --bg-primary: #0c0800;
   --bg-secondary: #140f00;
   --bg-card: #1c1500;
+  --bg-sidebar: #0e0a00;
   --bg-message-user: #2a1e00;
   --bg-message-rav: rgba(26,19,0,0.75);
   --accent: #b8892a;
@@ -56,7 +60,322 @@ body.night-mode {
   --shimmer: linear-gradient(135deg, #b8892a 0%, #7a5010 50%, #d4a93e 100%);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Theme: Branco & Dourado */
+body.theme-white {
+  --bg-primary: #faf7f0;
+  --bg-secondary: #f5f0e8;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f0ebe0;
+  --bg-message-user: #e8dfc8;
+  --bg-message-rav: rgba(255,252,245,0.95);
+  --accent: #a07820;
+  --accent-light: #c49a28;
+  --accent-glow: rgba(160,120,32,0.25);
+  --text-primary: #1a1200;
+  --text-secondary: #5a4010;
+  --text-muted: #9a8050;
+  --border: rgba(160,120,32,0.2);
+  --border-gold: rgba(160,120,32,0.35);
+  --star-color: rgba(160,120,32,0.4);
+  --shimmer: linear-gradient(135deg, #a07820 0%, #7a5a10 50%, #c49a28 100%);
+}
+
+/* Theme: Preto & Dourado */
+body.theme-black {
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #111111;
+  --bg-sidebar: #080808;
+  --bg-message-user: #1a1500;
+  --bg-message-rav: rgba(15,12,0,0.9);
+  --accent: #c9a84c;
+  --accent-light: #e2c06a;
+  --accent-glow: rgba(201,168,76,0.4);
+  --text-primary: #f0e6c8;
+  --text-secondary: #c4a84a;
+  --text-muted: #6a5828;
+  --border: rgba(201,168,76,0.2);
+  --border-gold: rgba(201,168,76,0.4);
+  --star-color: rgba(201,168,76,0.6);
+  --shimmer: linear-gradient(135deg, #c9a84c 0%, #8a6a1a 50%, #e2c06a 100%);
+}
+
+/* Theme: Azul Claro & Branco */
+body.theme-light-blue {
+  --bg-primary: #eef4ff;
+  --bg-secondary: #e0ecff;
+  --bg-card: #ffffff;
+  --bg-sidebar: #dce8ff;
+  --bg-message-user: #c8d8f8;
+  --bg-message-rav: rgba(255,255,255,0.95);
+  --accent: #1a50c0;
+  --accent-light: #2563e0;
+  --accent-glow: rgba(26,80,192,0.2);
+  --text-primary: #0a1a40;
+  --text-secondary: #2a4080;
+  --text-muted: #6080b8;
+  --border: rgba(26,80,192,0.18);
+  --border-gold: rgba(201,168,76,0.3);
+  --star-color: rgba(26,80,192,0.4);
+  --shimmer: linear-gradient(135deg, #1a50c0 0%, #0e2f80 50%, #2563e0 100%);
+}
+
+/* ============================================================
+   SIDEBAR — Conversations (like Claude/ChatGPT)
+   ============================================================ */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.sidebar-overlay.open { opacity: 1; pointer-events: all; }
+
+.sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-gold);
+  z-index: 41;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sidebar.open { transform: translateX(0); }
+
+.sidebar-header {
+  padding: 20px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar-logo-img {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-gold);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.sidebar-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-logo-text .sl-he {
+  font-family: var(--font-hebrew);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.1;
+}
+.sidebar-logo-text .sl-pt {
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.btn-new-chat {
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--shimmer);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.btn-new-chat:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+/* Theme switcher inside sidebar */
+.theme-switcher {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.theme-switcher-label {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.theme-options {
+  display: flex;
+  gap: 6px;
+}
+.theme-btn {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  text-align: center;
+  line-height: 1.3;
+}
+.theme-btn:hover { border-color: var(--accent-light); color: var(--text-primary); }
+.theme-btn.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+.theme-btn .tb-dot {
+  display: block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  margin: 0 auto 4px;
+  border: 1px solid currentColor;
+}
+
+/* Conversation list */
+.conv-list-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px;
+}
+.conv-list-wrap::-webkit-scrollbar { width: 3px; }
+.conv-list-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.conv-group-label {
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 10px 8px 5px;
+}
+
+.conv-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  margin-bottom: 2px;
+}
+.conv-item:hover { background: rgba(255,255,255,0.05); }
+.conv-item.active {
+  background: var(--gold-dim);
+  border: 1px solid var(--border-gold);
+}
+.conv-item-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+.conv-item-body { flex: 1; min-width: 0; }
+.conv-item-title {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.conv-item-meta {
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+.conv-item-del {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.conv-item:hover .conv-item-del { opacity: 1; }
+.conv-item-del:hover { color: #e05555; background: rgba(224,85,85,0.1); }
+
+.conv-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-footer-quote {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   THEME ADJUSTMENTS for light themes
+   ============================================================ */
+body.theme-white .app-header,
+body.theme-light-blue .app-header {
+  background: rgba(250,247,240,0.95) !important;
+}
+body.theme-white .input-bar,
+body.theme-light-blue .input-bar {
+  background: rgba(250,247,240,0.97) !important;
+}
+body.theme-white #stars-canvas,
+body.theme-light-blue #stars-canvas { opacity: 0.15; }
+body.theme-white .msg-bubble,
+body.theme-light-blue .msg-bubble { color: var(--text-primary) !important; }
+body.theme-white .input-row textarea,
+body.theme-light-blue .input-row textarea { color: var(--text-primary); }
+body.theme-light-blue .app-header { background: rgba(220,232,255,0.97) !important; }
+body.theme-light-blue .input-bar { background: rgba(220,232,255,0.97) !important; }
 
 html, body {
   height: 100%;
@@ -114,8 +433,8 @@ html, body {
 }
 
 @keyframes splashFadeIn {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .splash-menorah {
@@ -444,17 +763,17 @@ body.night-mode .app-header {
 }
 
 .header-avatar {
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: var(--shimmer);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-hebrew);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: #fff;
-  box-shadow: 0 0 0 2px var(--border-gold), 0 0 20px var(--accent-glow);
+  box-shadow: 0 0 20px var(--accent-glow);
   flex-shrink: 0;
   position: relative;
   animation: avatarGlow 4s ease-in-out infinite;
@@ -488,17 +807,16 @@ body.night-mode .app-header {
 }
 .header-title .ht-main {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 .header-title .ht-sub {
   font-family: var(--font-hebrew);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--gold);
-  opacity: 0.9;
-  letter-spacing: 0.02em;
+  opacity: 0.8;
 }
 
 .header-right {
@@ -578,12 +896,11 @@ body.night-mode .app-header {
 
 .wb-title {
   font-family: var(--font-hebrew);
-  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
   font-weight: 700;
   color: var(--gold);
-  margin-bottom: 8px;
-  text-shadow: 0 0 30px rgba(201,168,76,0.5);
-  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  text-shadow: 0 0 20px rgba(201,168,76,0.4);
 }
 
 .wb-greeting {
@@ -652,7 +969,7 @@ body.night-mode .app-header {
 }
 
 @keyframes msgSlide {
-  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -698,11 +1015,10 @@ body.night-mode .app-header {
 .message.rav .msg-bubble {
   background: var(--bg-message-rav);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--border-gold);
   border-bottom-left-radius: 4px;
   color: var(--text-primary);
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 .message.user .msg-bubble {
@@ -838,13 +1154,13 @@ body.night-mode .input-bar {
 .input-row textarea::placeholder { color: var(--text-muted); font-style: italic; }
 .input-row textarea:focus {
   border-color: var(--accent-light);
-  background: rgba(255,255,255,0.08);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 0 20px var(--accent-glow);
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
 .btn-send {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--shimmer);
   border: none;
@@ -853,14 +1169,14 @@ body.night-mode .input-bar {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 4px 20px var(--accent-glow);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px var(--accent-glow);
 }
 .btn-send:hover {
-  transform: scale(1.12) translateY(-2px);
-  box-shadow: 0 8px 28px var(--accent-glow);
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
-.btn-send:active { transform: scale(0.94); }
+.btn-send:active { transform: scale(0.96); }
 .btn-send svg { width: 20px; height: 20px; fill: #fff; }
 
 /* ---- Sidebar / Drawer ---- */
@@ -1147,6 +1463,7 @@ body.night-mode .input-bar {
      LOGIN SCREEN
 ═══════════════════════════════════════════ -->
 <div class="screen hidden" id="login">
+  <div class="login-card">
     <div class="login-logo">
       <span class="logo-he">רַב הָאוֹר</span>
       <span class="logo-pt">RavHaOhr · Versão 1.0</span>
@@ -1215,16 +1532,74 @@ body.night-mode .input-bar {
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════
+     SIDEBAR — Conversations
+═══════════════════════════════════════════ -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <img class="sidebar-logo-img" src="data:image/jpeg;base64,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" alt="RavHaOhr" />
+      <div class="sidebar-logo-text">
+        <span class="sl-he">רַב הָאוֹר</span>
+        <span class="sl-pt">RavHaOhr · v1.0</span>
+      </div>
+    </div>
+    <button class="btn-new-chat" onclick="newChatFromSidebar()">
+      ✦ &nbsp;Nova Conversa
+    </button>
+  </div>
+
+  <div class="theme-switcher">
+    <div class="theme-switcher-label">Tema Visual</div>
+    <div class="theme-options">
+      <button class="theme-btn active" id="tb-auto" onclick="setTheme('auto')">
+        <span class="tb-dot" style="background:linear-gradient(135deg,#060d1f 50%,#0c0800 50%);"></span>Auto
+      </button>
+      <button class="theme-btn" id="tb-black" onclick="setTheme('black')">
+        <span class="tb-dot" style="background:#050505;border-color:#c9a84c;"></span>Preto
+      </button>
+      <button class="theme-btn" id="tb-white" onclick="setTheme('white')">
+        <span class="tb-dot" style="background:#faf7f0;border-color:#a07820;"></span>Branco
+      </button>
+      <button class="theme-btn" id="tb-blue" onclick="setTheme('light-blue')">
+        <span class="tb-dot" style="background:#eef4ff;border-color:#1a50c0;"></span>Azul
+      </button>
+    </div>
+  </div>
+
+  <div class="conv-list-wrap" id="conv-list">
+    <div class="conv-empty">
+      <div style="font-size:1.6rem;margin-bottom:8px;">🕎</div>
+      Suas conversas com o Rav<br>aparecerão aqui.
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <p class="sidebar-footer-quote">
+      "נֵר לְרַגְלִי דְבָרֶךָ"<br>
+      <em>Sua Palavra é lâmpada para os meus pés</em>
+    </p>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════
      MAIN APP
 ═══════════════════════════════════════════ -->
-<div class="screen" id="app">
+<div class="screen hidden" id="app">
 
   <!-- Header -->
   <header class="app-header">
     <div class="header-left">
-      <div class="header-avatar">
-        רא
+      <button class="btn-icon" title="Conversas" onclick="toggleSidebar()" style="margin-right:4px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <div class="header-avatar" style="padding:0;overflow:hidden;border:2px solid var(--border-gold);box-shadow:0 0 0 1px var(--border-gold),0 0 20px var(--accent-glow);">
+        <img src="data:image/jpeg;base64,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" alt="RavHaOhr" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" />
         <span class="status-dot"></span>
       </div>
       <div class="header-title">
@@ -1337,6 +1712,13 @@ body.night-mode .input-bar {
         Teste seus conhecimentos com o Rav
       </div>
     </div>
+    <div class="drawer-item" onclick="logout(); toggleDrawer();">
+      <span class="di-icon">→</span>
+      <div class="di-text">
+        <strong>Sair</strong>
+        Encerrar sessão
+      </div>
+    </div>
   </div>
 
   <div class="drawer-section">
@@ -1374,6 +1756,17 @@ body.night-mode .input-bar {
             Ler política completa →
           </a>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-section">
+    <div class="drawer-title">Conta</div>
+    <div class="drawer-item" onclick="toggleDrawer(); askDeleteAccount();" style="color:var(--text-secondary);">
+      <span class="di-icon" style="color:#e05555;">⚠</span>
+      <div class="di-text">
+        <strong style="color:#e05555;">Excluir Minha Conta</strong>
+        Exclusão permanente dos dados
       </div>
     </div>
   </div>
@@ -1489,17 +1882,161 @@ let isTyping = false;
 let conversationHistory = [];
 let typingInterval = null;
 
-// ─── THEME AUTO-DETECTION ─────────────────────
+// ─── THEME SYSTEM ─────────────────────────────
+let currentTheme = localStorage.getItem('rav-theme') || 'auto';
+
+function setTheme(theme) {
+  currentTheme = theme;
+  localStorage.setItem('rav-theme', theme);
+  applyTheme();
+  // Update active button
+  ['auto','black','white','light-blue'].forEach(t => {
+    const btn = document.getElementById('tb-' + (t === 'light-blue' ? 'blue' : t));
+    if (btn) btn.classList.toggle('active', t === theme);
+  });
+}
+
 function applyTheme() {
-  const h = new Date().getHours();
-  if (h >= 19 || h < 6) {
-    document.body.classList.add('night-mode');
+  const body = document.body;
+  // Remove all theme classes
+  body.classList.remove('night-mode','theme-white','theme-black','theme-light-blue');
+
+  if (currentTheme === 'auto') {
+    const h = new Date().getHours();
+    if (h >= 19 || h < 6) body.classList.add('night-mode');
   } else {
-    document.body.classList.remove('night-mode');
+    body.classList.add('theme-' + currentTheme);
   }
 }
 applyTheme();
-setInterval(applyTheme, 60000);
+setInterval(() => { if (currentTheme === 'auto') applyTheme(); }, 60000);
+
+// ─── SIDEBAR ──────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+  if (document.getElementById('sidebar').classList.contains('open')) {
+    renderConvList();
+  }
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+function newChatFromSidebar() {
+  closeSidebar();
+  startNewConversation();
+}
+
+// ─── LOCALSTORAGE CONVERSATIONS ───────────────
+const STORAGE_KEY = 'rav-conversations';
+let conversations = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let activeConvId  = null;
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+
+function saveCurrentConv() {
+  if (!conversationHistory.length) return;
+  const title = conversationHistory[0].content.slice(0, 40) + (conversationHistory[0].content.length > 40 ? '...' : '');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+
+  if (activeConvId) {
+    const idx = conversations.findIndex(c => c.id === activeConvId);
+    if (idx >= 0) {
+      conversations[idx].history = [...conversationHistory];
+      conversations[idx].title   = title;
+      conversations[idx].date    = dateStr;
+    }
+  } else {
+    activeConvId = genId();
+    conversations.unshift({ id: activeConvId, title, date: dateStr, history: [...conversationHistory] });
+  }
+  // Keep max 40 conversations
+  if (conversations.length > 40) conversations = conversations.slice(0, 40);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+}
+
+function loadConv(id) {
+  const conv = conversations.find(c => c.id === id);
+  if (!conv) return;
+  closeSidebar();
+
+  // Save current before switching
+  saveCurrentConv();
+
+  activeConvId = id;
+  conversationHistory = [...conv.history];
+
+  // Rebuild chat area
+  const chatArea = document.getElementById('chat-area');
+  const wb = document.getElementById('welcome-banner');
+  chatArea.querySelectorAll('.message,.typing-indicator').forEach(m => m.remove());
+  if (wb) wb.style.display = 'none';
+
+  conversationHistory.forEach(msg => {
+    if (msg.role === 'user' || msg.role === 'assistant') {
+      appendMessage(msg.role === 'assistant' ? 'rav' : 'user', msg.content);
+    }
+  });
+  scrollToBottom();
+}
+
+function deleteConv(id, e) {
+  e.stopPropagation();
+  conversations = conversations.filter(c => c.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+  if (activeConvId === id) {
+    activeConvId = null;
+    conversationHistory = [];
+    const chatArea = document.getElementById('chat-area');
+    chatArea.querySelectorAll('.message,.typing-indicator').forEach(m => m.remove());
+    const wb = document.getElementById('welcome-banner');
+    if (wb) wb.style.display = '';
+  }
+  renderConvList();
+}
+
+function renderConvList() {
+  conversations = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const container = document.getElementById('conv-list');
+  if (!conversations.length) {
+    container.innerHTML = `<div class="conv-empty"><div style="font-size:1.6rem;margin-bottom:8px;">🕎</div>Suas conversas com o Rav<br>aparecerão aqui.</div>`;
+    return;
+  }
+
+  // Group by Today / Earlier
+  const today = new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+  const todayConvs   = conversations.filter(c => c.date && c.date.startsWith(today));
+  const earlierConvs = conversations.filter(c => !c.date || !c.date.startsWith(today));
+
+  let html = '';
+  if (todayConvs.length) {
+    html += `<div class="conv-group-label">Hoje</div>`;
+    todayConvs.forEach(c => { html += convItemHTML(c); });
+  }
+  if (earlierConvs.length) {
+    html += `<div class="conv-group-label">Anteriores</div>`;
+    earlierConvs.forEach(c => { html += convItemHTML(c); });
+  }
+  container.innerHTML = html;
+}
+
+function convItemHTML(c) {
+  const isActive = c.id === activeConvId;
+  return `<div class="conv-item${isActive ? ' active' : ''}" onclick="loadConv('${c.id}')">
+    <span class="conv-item-icon">✦</span>
+    <div class="conv-item-body">
+      <div class="conv-item-title">${c.title || 'Conversa sem título'}</div>
+      <div class="conv-item-meta">${c.date || ''}</div>
+    </div>
+    <button class="conv-item-del" onclick="deleteConv('${c.id}', event)" title="Excluir">✕</button>
+  </div>`;
+}
 
 // ─── STARS CANVAS ─────────────────────────────
 (function initStars() {
@@ -1522,14 +2059,12 @@ setInterval(applyTheme, 60000);
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const isNight = document.body.classList.contains('night-mode');
-    const starColor = isNight ? '201,168,76' : '120,170,255';
     stars.forEach(s => {
       s.o += s.s * s.d;
       if (s.o > 0.8 || s.o < 0.05) s.d *= -1;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${starColor},${s.o})`;
+      ctx.fillStyle = `rgba(180,210,255,${s.o})`;
       ctx.fill();
     });
     requestAnimationFrame(draw);
@@ -1576,14 +2111,15 @@ setInterval(applyTheme, 60000);
   setTimeout(() => {
     clearInterval(quoteTimer);
     clearInterval(stateTimer);
-    showApp();
+    showLogin();
   }, SPLASH_DURATION);
 })();
 
-function showApp() {
+function showLogin() {
   const splash = document.getElementById('splash');
+  const login  = document.getElementById('login');
   splash.classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
+  login.classList.remove('hidden');
 }
 
 // ─── LIVE CLOCK ───────────────────────────────
@@ -1649,6 +2185,8 @@ function closeNewConvModal() {
 
 function startNewConversation() {
   closeNewConvModal();
+  saveCurrentConv();
+  activeConvId = null;
   conversationHistory = [];
   const chatArea = document.getElementById('chat-area');
   const msgs = chatArea.querySelectorAll('.message, .typing-indicator');
@@ -1717,6 +2255,7 @@ async function sendMessage() {
     hideTyping();
     appendMessage('rav', ravReply);
     conversationHistory.push({ role: 'assistant', content: ravReply });
+    saveCurrentConv();
     scrollToBottom();
 
   } catch (err) {
@@ -1733,11 +2272,12 @@ function appendMessage(role, content) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
 
-  const avatarText = role === 'rav' ? 'רא' : '👤';
+  const ravImg = '<img src="data:image/jpeg;base64,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" style="width:100%;height:100%;object-fit:cover;display:block;" />';
+  const avatarText = role === 'rav' ? ravImg : '👤';
   const metaText   = role === 'rav' ? `RavHaOhr · ${now}` : `Você · ${now}`;
 
   div.innerHTML = `
-    <div class="msg-avatar">${avatarText}</div>
+    <div class="msg-avatar" style="${role === 'rav' ? 'padding:0;overflow:hidden;border:1px solid var(--border-gold);' : ''}">${avatarText}</div>
     <div class="msg-bubble">
       <div class="msg-meta">${metaText}</div>
       ${content.replace(/\n/g, '<br>')}
@@ -1756,7 +2296,7 @@ function showTyping() {
 
   let ti = 0;
   div.innerHTML = `
-    <div class="msg-avatar" style="background:var(--shimmer);box-shadow:0 0 15px var(--accent-glow);font-family:var(--font-hebrew);color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;">רא</div>
+    <div class="msg-avatar" style="background:var(--shimmer);box-shadow:0 0 15px var(--accent-glow);width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid var(--border-gold);"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD4FtraS5chBwOSfSrf2BVIG3d7hs/yq/oFtNLEWijRxn5gzbeOnFd/e+F9Mu4rOTSNPvLV/s6NKJZFk+Y9TxjHbjtXBiMwhQmoS6/gd1DAzqwc4nn9n4c1DUNQg07StHvNRvpxvS2to2diucZwOeoNdDrfwu8W+GSieKfBmtaG8y77Z7uB1im4JKh+gbAJxnnB6V7RZatB4A+KOhWun6LfxS6TZxjUDar5s80uNzBxjAO3kKef6/RXiH4p2PjC4tNDvtJ1ieCNYxdDU9OEMLW8+zYxboxKPnrw3HBFeTVzusnFwp3jJXv/AF8vXyPQhlMHFty1V7/11Pzhk01BvVRhkOCAc4rPmhaF9p5HY171rnw2vLTxDrOk2ekyiWCaSGE3AALBSeCAcBuBzkjvXj/iDT5LKQpPsWUH5lVgcflXqYPM6OKdoPU4MTl9WhFSktCbwr5ZuHNzf/ZII1Llwu89QMKp6k56V6I/xHbSdGmj8M6bBFPjY97qCpJMRjI2IAFRs5IPzfpXkdq4EDRnA3kLuIzjnNXrkTxsYJgwDoNp6gkdOe9Ovl1HE1Oasrrt0/4Pz0CljqtGny03bzPdvAPiWK9s9Y1S5fVpNSktWt2exuVimuGlRUw0jAheckvgkcj+LNfTWm6ZqZ+Gl1ZfEJb4X2kWEc7qJo5rW8HllVkjMKqF2hQDHz8yBs5Jr5V+BPibTdE1R7eZoIpXCuzN1kVVbMfPQNgc9jjFfVlr460O0/Z21JJmiuPMtXi+6AE6qAoHQZ69wTz1r5zNLUa0YKGl1Z/JHr4Oc6lFvm/q7ueEeI/H/hfxFNrFhrlg9heJcuItQtis0ToQCu9Vxk4zll/LNfPPjJIYJ3hhlhlX5XV4TlWB5BBxVfUb+R9XuBC5VZpt5wOCPUjucVT10zgQpMuAIgF4xkAnGfwxXrZblEMBO9N6Pp/l/lscGMx7xMLSW3UoWj7VAUAtu6EZFX5onnljS2gLydSiDAJ9h9PSseKVon3Ka0LfVXgkLgvlvvYOD+Yr3H5HlJrqXLG+k0m6kfY6ybSFDqRj8+3J/HFdHB8QtSXwi2irJIYTIXA3HHJz+fb/APVW/wCCfjYfCP2K2/sixu7dW8y6NxbJKZmJ+YncDnC/KB0HJxkmu81n43/BzU7bFx8MtAuZZCWlkXSI4So9FI53nqD93jkc5HjYyvWVTklh+dd0/wBGv1PTw1GDhzRrKL7PQ8A08S3eqLPgM0bbyMjHXJqbxXK0l0glSNXAABjwQw9cj+RrrvEnjDwG9ldL4V0y602dXxAINwhdN2eVd2ZMqem44K8Ehvl8zubl7mXc3CjO1c5C16FG9Rqo1bye5yVWoJ007n//2Q==" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
     <div class="typing-bubble">
       <div class="typing-text" id="typing-text">${RAV_THINKING[0]}</div>
       <div class="typing-dots">
@@ -1901,14 +2441,14 @@ async function confirmDeleteAccount() {
   const auth     = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // ── Observador de estado — mantido para uso futuro, sem redirecionamento ──
+  // ── Observador de estado — detecta login/logout automaticamente ──
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log("✅ Firebase: usuário detectado:", user.email);
-      currentUser = user;
+      console.log("✅ Logado:", user.email);
+      window.onUserLoggedIn(user);
     } else {
-      console.log("ℹ️ Firebase: sem sessão ativa (modo aberto)");
-      currentUser = null;
+      console.log("🔒 Deslogado");
+      window.onUserLoggedOut();
     }
   });
 
