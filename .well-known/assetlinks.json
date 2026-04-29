@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.yisrael.ravohr",
+      "sha256_cert_fingerprints": [
+        "50:79:32:AE:7D:0E:C2:E1:0C:6C:B0:01:5D:DB:AF:E5:E0:7F:4E:55:85:64:59:54:5F:41:C1:6E:4D:29:D2:49"
+      ]
+    }
+  }
+]
