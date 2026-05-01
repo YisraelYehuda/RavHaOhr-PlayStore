@@ -433,8 +433,8 @@ html, body {
 }
 
 @keyframes splashFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .splash-menorah {
@@ -445,8 +445,8 @@ html, body {
 }
 
 @keyframes menorahPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.06); opacity: 0.85; }
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.04); opacity: 0.88; }
 }
 
 .splash-title-he {
@@ -509,8 +509,8 @@ html, body {
 .splash-dot:nth-child(3) { animation-delay: 0.5s; }
 
 @keyframes dotPulse {
-  0%, 100% { opacity: 0.2; transform: scale(0.8); }
-  50%       { opacity: 1;   transform: scale(1.2); }
+  0%, 100% { opacity: 0.15; transform: scale(0.75); }
+  50%       { opacity: 1;    transform: scale(1.25); }
 }
 
 .splash-preparing {
@@ -556,8 +556,8 @@ html, body {
 }
 
 @keyframes cardReveal {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(36px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .login-card > * { position: relative; z-index: 1; }
@@ -780,8 +780,8 @@ body.night-mode .app-header {
 }
 
 @keyframes avatarGlow {
-  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
-  50%       { box-shadow: 0 0 35px var(--accent-glow), 0 0 60px var(--accent-glow); }
+  0%, 100% { box-shadow: 0 0 18px var(--accent-glow); }
+  50%       { box-shadow: 0 0 32px var(--accent-glow), 0 0 52px var(--accent-glow); }
 }
 
 .header-avatar .status-dot {
@@ -796,8 +796,8 @@ body.night-mode .app-header {
   animation: statusPulse 2s ease-in-out infinite;
 }
 @keyframes statusPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.3); opacity: 0.7; }
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.2); opacity: 0.75; }
 }
 
 .header-title {
@@ -883,8 +883,8 @@ body.night-mode .app-header {
 }
 
 @keyframes wbReveal {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .wb-menorah {
@@ -969,7 +969,7 @@ body.night-mode .app-header {
 }
 
 @keyframes msgSlide {
-  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -1466,7 +1466,7 @@ body.night-mode .input-bar {
   <div class="login-card">
     <div class="login-logo">
       <span class="logo-he">רַב הָאוֹר</span>
-      <span class="logo-pt">RavHaOhr · Versão 1.0</span>
+      <span class="logo-pt">RavHaOhr · Versão 1.0.5</span>
     </div>
     <h2 class="login-title">Bem-vindo à Luz da Torá</h2>
     <p class="login-subtitle">Entre para dialogar com o RavHaOhr e aprofundar seu conhecimento sagrado</p>
@@ -1534,7 +1534,7 @@ body.night-mode .input-bar {
       Continuar como Convidado
     </button>
 
-    <div class="login-version">RavHaOhr v1.0 · Criado por Yisrael Yehuda · 5786</div>
+    <div class="login-version">RavHaOhr v1.0.5 · Criado por Yisrael Yehuda · 5786</div>
     <div style="text-align:center;margin-top:10px;">
       <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
          style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
@@ -1557,7 +1557,7 @@ body.night-mode .input-bar {
       <img class="sidebar-logo-img" src="data:image/jpeg;base64,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" alt="RavHaOhr" />
       <div class="sidebar-logo-text">
         <span class="sl-he">רַב הָאוֹר</span>
-        <span class="sl-pt">RavHaOhr · v1.0</span>
+        <span class="sl-pt">RavHaOhr · v1.0.5</span>
       </div>
     </div>
     <button class="btn-new-chat" onclick="newChatFromSidebar()">
@@ -1787,7 +1787,7 @@ body.night-mode .input-bar {
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
     <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v1.0 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
+      RavHaOhr v1.0.5 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
     </p>
   </div>
 </div>
