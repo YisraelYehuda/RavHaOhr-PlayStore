@@ -1661,7 +1661,7 @@ body.night-mode .input-bar {
     <div class="sidebar-profile-avatar">👤</div>
     <div class="sidebar-profile-info">
       <div class="sidebar-profile-name" id="profile-name">—</div>
-      <div class="sidebar-profile-credits" id="credits-display">⚡ 5 créditos gratuitos hoje</div>
+      <div class="sidebar-profile-credits" id="credits-display">⏳ Carregando...</div>
     </div>
   </div>
 
@@ -2791,7 +2791,8 @@ async function confirmDeleteAccount() {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       await updateProfile(cred.user, { displayName: name });
-      window.onUserLoggedIn({ ...cred.user, displayName: name });
+      // onAuthStateChanged vai disparar automaticamente e carregar o Firestore
+      // Não chamamos onUserLoggedIn aqui para evitar corrida — o observer cuida disso
     } catch (e) {
       console.error(e);
       const msgs = {
