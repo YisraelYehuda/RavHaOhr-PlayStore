@@ -100,6 +100,52 @@ body.theme-black {
   --shimmer: linear-gradient(135deg, #c9a84c 0%, #8a6a1a 50%, #e2c06a 100%);
 }
 
+/* Theme: Jerusalém — pedra creme + ouro quente */
+body.theme-jerusalem {
+  --bg-primary: #1a1208;
+  --bg-secondary: #231a0a;
+  --bg-card: #2e2210;
+  --bg-sidebar: #161008;
+  --bg-message-user: #3a2a10;
+  --bg-message-rav: rgba(40,28,8,0.85);
+  --accent: #c8882a;
+  --accent-light: #e6a840;
+  --accent-glow: rgba(200,136,42,0.38);
+  --gold: #f0c050;
+  --gold-light: #f8d878;
+  --gold-dim: rgba(240,192,80,0.18);
+  --text-primary: #f8edcc;
+  --text-secondary: #c8a870;
+  --text-muted: #7a6038;
+  --border: rgba(200,136,42,0.22);
+  --border-gold: rgba(240,192,80,0.35);
+  --star-color: rgba(240,192,80,0.55);
+  --shimmer: linear-gradient(135deg, #c8882a 0%, #8a5510 50%, #e6a840 100%);
+}
+
+/* Theme: Safira — azul profundo + prata */
+body.theme-sapphire {
+  --bg-primary: #05080f;
+  --bg-secondary: #080d1c;
+  --bg-card: #0c1428;
+  --bg-sidebar: #060a16;
+  --bg-message-user: #0f1e3c;
+  --bg-message-rav: rgba(8,14,32,0.88);
+  --accent: #4a7fe8;
+  --accent-light: #6a9fff;
+  --accent-glow: rgba(74,127,232,0.4);
+  --gold: #c8d8ff;
+  --gold-light: #e0eaff;
+  --gold-dim: rgba(200,216,255,0.12);
+  --text-primary: #e8f0ff;
+  --text-secondary: #8aabdf;
+  --text-muted: #3a5888;
+  --border: rgba(74,127,232,0.25);
+  --border-gold: rgba(200,216,255,0.22);
+  --star-color: rgba(74,127,232,0.7);
+  --shimmer: linear-gradient(135deg, #2a5fd0 0%, #1a3a8a 50%, #4a7fe8 100%);
+}
+
 /* Theme: Azul Claro & Branco */
 body.theme-light-blue {
   --bg-primary: #eef4ff;
@@ -1402,6 +1448,175 @@ body.night-mode .input-bar {
 .modal-btn.confirm:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
 
 /* ============================================================
+   FAVORITES SYSTEM
+   ============================================================ */
+.msg-fav-btn {
+  position: absolute;
+  top: 8px; right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 2px 4px;
+  border-radius: 6px;
+  line-height: 1;
+  color: var(--text-muted);
+}
+.message:hover .msg-fav-btn { opacity: 1; }
+.msg-fav-btn.saved { opacity: 1; color: var(--gold); }
+.msg-fav-btn:active { transform: scale(1.3); }
+
+/* Favorites modal */
+.fav-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.fav-modal-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.fav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.fav-list::-webkit-scrollbar { width: 3px; }
+.fav-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.fav-item {
+  background: var(--bg-message-rav);
+  border: 1px solid var(--border-gold);
+  border-left: 3px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px 16px;
+  position: relative;
+  animation: msgSlide 0.3s ease forwards;
+}
+.fav-item-text {
+  font-family: var(--font-text);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.fav-item-meta {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.fav-item-del {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+.fav-item-del:hover { color: #f87171; }
+.fav-empty-msg {
+  text-align: center;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  padding: 30px 0;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   STREAK BANNER
+   ============================================================ */
+.streak-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--gold-dim);
+  border: 1px solid var(--border-gold);
+  border-radius: 14px;
+  padding: 12px 18px;
+  margin: 0 16px 14px;
+  animation: wbReveal 0.6s ease forwards;
+  flex-shrink: 0;
+}
+.streak-icon { font-size: 1.3rem; flex-shrink: 0; }
+.streak-text {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--gold);
+  line-height: 1.4;
+}
+.streak-text strong {
+  font-style: normal;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   QUICK REPLIES
+   ============================================================ */
+.quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 0 16px 12px;
+  flex-shrink: 0;
+  animation: wbReveal 0.4s ease forwards;
+}
+.qr-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  background: var(--gold-dim);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+}
+.qr-btn:hover {
+  background: var(--gold);
+  color: var(--bg-primary);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+.qr-btn:active { transform: scale(0.96); }
+
+/* Skeleton loading */
+@keyframes shimmerSkel {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, rgba(255,255,255,0.06) 50%, var(--bg-card) 75%);
+  background-size: 800px 100%;
+  animation: shimmerSkel 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ============================================================
    UTILITIES
    ============================================================ */
 .hidden { display: none !important; }
@@ -1600,7 +1815,7 @@ body.night-mode .input-bar {
   <div class="login-card">
     <div class="login-logo">
       <span class="logo-he">רַב הָאוֹר</span>
-      <span class="logo-pt">RavHaOhr · Versão 2.0.1</span>
+      <span class="logo-pt">RavHaOhr · Versão 2.0.3</span>
     </div>
     <h2 class="login-title">Bem-vindo à Luz da Torá</h2>
     <p class="login-subtitle">Entre para dialogar com o RavHaOhr e aprofundar seu conhecimento sagrado</p>
@@ -1655,7 +1870,7 @@ body.night-mode .input-bar {
       </div>
     </div>
 
-    <div class="login-version">RavHaOhr v2.0.1 · Criado por Yisrael Yehuda · 5786</div>
+    <div class="login-version">RavHaOhr v2.0.3 · Criado por Yisrael Yehuda · 5786</div>
     <div style="text-align:center;margin-top:10px;">
       <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
          style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
@@ -1678,7 +1893,7 @@ body.night-mode .input-bar {
       <img class="sidebar-logo-img" src="data:image/jpeg;base64,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" alt="RavHaOhr" />
       <div class="sidebar-logo-text">
         <span class="sl-he">רַב הָאוֹר</span>
-        <span class="sl-pt">RavHaOhr · v2.0.1</span>
+        <span class="sl-pt">RavHaOhr · v2.0.3</span>
       </div>
     </div>
     <button class="btn-new-chat" onclick="newChatFromSidebar()">
@@ -1708,6 +1923,12 @@ body.night-mode .input-bar {
       </button>
       <button class="theme-btn" id="tb-blue" onclick="setTheme('light-blue')">
         <span class="tb-dot" style="background:#eef4ff;border-color:#1a50c0;"></span>Azul
+      </button>
+      <button class="theme-btn" id="tb-jerusalem" onclick="setTheme('jerusalem')">
+        <span class="tb-dot" style="background:#1a1208;border-color:#f0c050;"></span>Jerusalém
+      </button>
+      <button class="theme-btn" id="tb-sapphire" onclick="setTheme('sapphire')">
+        <span class="tb-dot" style="background:#05080f;border-color:#4a7fe8;"></span>Safira
       </button>
     </div>
   </div>
@@ -1766,6 +1987,12 @@ body.night-mode .input-bar {
     </div>
   </header>
 
+  <!-- Streak banner (shown by JS when streak >= 2) -->
+  <div class="streak-banner" id="streak-banner" style="display:none;">
+    <div class="streak-icon">🔥</div>
+    <div class="streak-text" id="streak-text">Você conversou com o Rav por <strong>2 dias consecutivos</strong>.</div>
+  </div>
+
   <!-- Chat area -->
   <div class="chat-area" id="chat-area">
     <!-- Welcome banner -->
@@ -1791,6 +2018,15 @@ body.night-mode .input-bar {
         </p>
       </div>
     </div>
+  </div>
+
+  <!-- Quick replies (shown after Rav responds) -->
+  <div class="quick-replies" id="quick-replies" style="display:none;">
+    <button class="qr-btn" onclick="sendQuickReply('Explique mais')">🔍 Explique mais</button>
+    <button class="qr-btn" onclick="sendQuickReply('Faça um resumo')">📋 Resumo</button>
+    <button class="qr-btn" onclick="sendQuickReply('Dê um conselho prático')">💡 Conselho</button>
+    <button class="qr-btn" onclick="sendQuickReply('Qual a base bíblica?')">📖 Base bíblica</button>
+    <button class="qr-btn" onclick="sendQuickReply('Aprofunde mais')">✨ Mais profundo</button>
   </div>
 
   <!-- Input bar -->
@@ -1847,6 +2083,13 @@ body.night-mode .input-bar {
         Iniciar um novo diálogo com o Rav
       </div>
     </div>
+    <div class="drawer-item" onclick="toggleDrawer(); openFavoritesModal();">
+      <span class="di-icon">⭐</span>
+      <div class="di-text">
+        <strong>Ensinamentos Salvos</strong>
+        Suas respostas favoritas do Rav
+      </div>
+    </div>
     <div class="drawer-item" onclick="toggleDrawer(); openQuizModal();">
       <span class="di-icon">📜</span>
       <div class="di-text">
@@ -1872,7 +2115,7 @@ body.night-mode .input-bar {
         Falar com o suporte Rav Ohr
       </div>
     </a>
-    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.0.1">
+    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.0.3">
       <span class="di-icon">⚠️</span>
       <div class="di-text">
         <strong>Reportar Problema</strong>
@@ -1934,7 +2177,7 @@ body.night-mode .input-bar {
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
     <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v2.0.1 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
+      RavHaOhr v2.0.3 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
     </p>
   </div>
 </div>
@@ -1976,6 +2219,31 @@ body.night-mode .input-bar {
         style="background:linear-gradient(135deg,#c0392b,#e74c3c);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(192,57,43,0.4);">
         Excluir Conta
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FAVORITES MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="favorites-modal">
+  <div class="modal-card" style="max-width:420px;text-align:left;padding:28px 24px;">
+    <div class="fav-modal-header">
+      <div class="fav-modal-title">⭐ Ensinamentos Salvos</div>
+      <button class="drawer-close" onclick="closeFavoritesModal()" style="margin:0;">✕</button>
+    </div>
+    <div class="fav-list" id="fav-list">
+      <div class="fav-empty-msg">
+        🕎<br><br>
+        Nenhum ensinamento salvo ainda.<br>
+        <em>Toque na estrela ☆ em qualquer resposta do Rav para guardar.</em>
+      </div>
+    </div>
+    <div style="margin-top:18px;text-align:center;">
+      <p style="font-family:var(--font-text);font-style:italic;font-size:0.8rem;color:var(--text-muted);line-height:1.6;">
+        "שְׁמוֹר דְּבָרַי" — Guarda minhas palavras<br>
+        <span style="font-family:var(--font-display);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;">Mishle 7:1</span>
+      </p>
     </div>
   </div>
 </div>
@@ -2076,8 +2344,9 @@ function setTheme(theme) {
   localStorage.setItem('rav-theme', theme);
   applyTheme();
   // Update active button
-  ['auto','black','white','light-blue'].forEach(t => {
-    const btn = document.getElementById('tb-' + (t === 'light-blue' ? 'blue' : t));
+  ['auto','black','white','light-blue','jerusalem','sapphire'].forEach(t => {
+    const id = t === 'light-blue' ? 'tb-blue' : 'tb-' + t;
+    const btn = document.getElementById(id);
     if (btn) btn.classList.toggle('active', t === theme);
   });
 }
@@ -2085,7 +2354,7 @@ function setTheme(theme) {
 function applyTheme() {
   const body = document.body;
   // Remove all theme classes
-  body.classList.remove('night-mode','theme-white','theme-black','theme-light-blue');
+  body.classList.remove('night-mode','theme-white','theme-black','theme-light-blue','theme-jerusalem','theme-sapphire');
 
   if (currentTheme === 'auto') {
     const h = new Date().getHours();
@@ -2362,7 +2631,123 @@ function toggleRegister() {
   rf.classList.toggle('hidden');
 }
 
-// ─── DRAWER ────────────────────────────────────
+// ─── FAVORITES SYSTEM ────────────────────────
+const FAV_KEY = 'rav-favorites';
+
+function getFavorites() {
+  return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+}
+
+function saveFavorites(favs) {
+  localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+}
+
+function toggleFavorite(msgId, content) {
+  let favs = getFavorites();
+  const idx = favs.findIndex(f => f.id === msgId);
+  const btn = document.querySelector(`.msg-fav-btn[data-id="${msgId}"]`);
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    if (btn) { btn.textContent = '☆'; btn.classList.remove('saved'); btn.title = 'Salvar ensinamento'; }
+  } else {
+    const now = new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'}) +
+                ' ' + new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    favs.unshift({ id: msgId, content, date: now });
+    if (favs.length > 100) favs = favs.slice(0, 100);
+    if (btn) { btn.textContent = '★'; btn.classList.add('saved'); btn.title = 'Remover dos favoritos'; }
+    // small pulse feedback
+    if (btn) { btn.style.transform = 'scale(1.5)'; setTimeout(() => btn.style.transform = '', 250); }
+  }
+  saveFavorites(favs);
+}
+
+function openFavoritesModal() {
+  const modal = document.getElementById('favorites-modal');
+  const list  = document.getElementById('fav-list');
+  const favs  = getFavorites();
+  modal.classList.add('open');
+
+  if (!favs.length) {
+    list.innerHTML = `<div class="fav-empty-msg">🕎<br><br>Nenhum ensinamento salvo ainda.<br><em>Toque na estrela ☆ em qualquer resposta do Rav para guardar.</em></div>`;
+    return;
+  }
+
+  list.innerHTML = favs.map(f => `
+    <div class="fav-item" id="fav-item-${f.id}">
+      <button class="fav-item-del" onclick="deleteFavorite('${f.id}')" title="Remover">✕</button>
+      <div class="fav-item-text">${f.content.replace(/\n/g,'<br>').slice(0, 400)}${f.content.length > 400 ? '...' : ''}</div>
+      <div class="fav-item-meta">⭐ Salvo em ${f.date}</div>
+    </div>
+  `).join('');
+}
+
+function closeFavoritesModal() {
+  document.getElementById('favorites-modal').classList.remove('open');
+}
+
+function deleteFavorite(id) {
+  let favs = getFavorites();
+  favs = favs.filter(f => f.id !== id);
+  saveFavorites(favs);
+  const el = document.getElementById('fav-item-' + id);
+  if (el) { el.style.opacity = '0'; el.style.transform = 'scale(0.9)'; el.style.transition = '0.2s'; setTimeout(() => el.remove(), 200); }
+  // sync star in chat if visible
+  const btn = document.querySelector(`.msg-fav-btn[data-id="${id}"]`);
+  if (btn) { btn.textContent = '☆'; btn.classList.remove('saved'); }
+}
+
+// ─── STREAK SYSTEM ───────────────────────────
+(function initStreak() {
+  const today    = new Date().toISOString().split('T')[0];
+  const stored   = JSON.parse(localStorage.getItem('rav-streak') || '{"days":0,"last":""}');
+  let { days, last } = stored;
+
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+  if (last === today) {
+    // already counted today — just show
+  } else if (last === yesterday) {
+    days += 1;
+    localStorage.setItem('rav-streak', JSON.stringify({ days, last: today }));
+  } else {
+    days = 1;
+    localStorage.setItem('rav-streak', JSON.stringify({ days, last: today }));
+  }
+
+  if (days >= 2) {
+    const banner = document.getElementById('streak-banner');
+    const text   = document.getElementById('streak-text');
+    if (banner && text) {
+      const label = days === 2 ? '2 dias consecutivos' :
+                    days < 7  ? `${days} dias consecutivos` :
+                    days === 7 ? '7 dias — uma semana completa!' :
+                    days === 30 ? '30 dias — um mês de luz!' :
+                    `${days} dias consecutivos`;
+      text.innerHTML = `Você conversou com o Rav por <strong>${label}</strong>. ברוך השם`;
+      banner.style.display = 'flex';
+      setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 0.8s'; setTimeout(() => banner.style.display = 'none', 800); }, 6000);
+    }
+  }
+})();
+
+// ─── QUICK REPLIES ────────────────────────────
+function sendQuickReply(text) {
+  document.getElementById('msg-input').value = text;
+  document.getElementById('quick-replies').style.display = 'none';
+  sendMessage();
+}
+
+function showQuickReplies() {
+  const qr = document.getElementById('quick-replies');
+  if (qr) { qr.style.display = 'flex'; }
+}
+
+function hideQuickReplies() {
+  const qr = document.getElementById('quick-replies');
+  if (qr) qr.style.display = 'none';
+}
+
+// ─── FAVORITES SYSTEM ────────────────────────
 function toggleDrawer() {
   document.getElementById('drawer').classList.toggle('open');
   document.getElementById('drawer-overlay').classList.toggle('open');
@@ -2444,6 +2829,7 @@ async function sendMessage() {
 
   const wb = document.getElementById('welcome-banner');
   if (wb) wb.style.display = 'none';
+  hideQuickReplies();
 
   appendMessage('user', text);
   conversationHistory.push({ role: 'user', content: text });
@@ -2489,22 +2875,36 @@ async function sendMessage() {
 function appendMessage(role, content) {
   const chatArea = document.getElementById('chat-area');
   const now = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  const msgId = Date.now().toString(36) + Math.random().toString(36).slice(2,5);
 
   const div = document.createElement('div');
   div.className = `message ${role}`;
+  div.dataset.msgId = msgId;
 
   const ravImg = '<img src="data:image/jpeg;base64,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" style="width:100%;height:100%;object-fit:cover;display:block;" />';
   const avatarText = role === 'rav' ? ravImg : '👤';
   const metaText   = role === 'rav' ? `RavHaOhr · ${now}` : `Você · ${now}`;
 
+  // Check if already favorited
+  const favs = getFavorites();
+  const isFaved = favs.some(f => f.content === content);
+  const favBtnHtml = role === 'rav'
+    ? `<button class="msg-fav-btn${isFaved ? ' saved' : ''}" data-id="${msgId}" onclick="toggleFavorite('${msgId}', this.closest('.message').dataset.content)" title="${isFaved ? 'Remover dos favoritos' : 'Salvar ensinamento'}">${isFaved ? '★' : '☆'}</button>`
+    : '';
+
+  div.dataset.content = content;
   div.innerHTML = `
     <div class="msg-avatar" style="${role === 'rav' ? 'padding:0;overflow:hidden;border:1px solid var(--border-gold);' : ''}">${avatarText}</div>
-    <div class="msg-bubble">
+    <div class="msg-bubble" style="position:relative;">
       <div class="msg-meta">${metaText}</div>
       ${content.replace(/\n/g, '<br>')}
+      ${favBtnHtml}
     </div>
   `;
   chatArea.appendChild(div);
+
+  // Show quick replies after Rav responds
+  if (role === 'rav') showQuickReplies();
 }
 
 function showTyping() {
