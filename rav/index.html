@@ -2314,7 +2314,7 @@ function onUserLoggedIn(user, userData) {
 
   if (userData) {
     window._userData = userData;
-    updateCreditsUI(userData);
+    if (window.updateCreditsUI) window.updateCreditsUI(userData);
   }
 }
 
@@ -2734,7 +2734,8 @@ async function confirmDeleteAccount() {
     return true;
   }
 
-  window.consumeCredit = consumeCredit;
+  window.consumeCredit   = consumeCredit;
+  window.updateCreditsUI = updateCreditsUI;
 
   // ── Observador de estado ──────────────────────────────────────────
   onAuthStateChanged(auth, async (user) => {
