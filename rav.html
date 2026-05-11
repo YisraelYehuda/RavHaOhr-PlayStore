@@ -532,12 +532,12 @@ html, body {
 
 .login-card {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-gold);
   border-radius: 24px;
   padding: clamp(32px, 6vw, 52px) clamp(28px, 5vw, 48px);
   max-width: 440px;
   width: 100%;
-  box-shadow: var(--shadow-deep), 0 0 60px var(--accent-glow);
+  box-shadow: var(--shadow-deep), 0 0 80px var(--accent-glow), 0 0 1px var(--gold-light) inset;
   animation: cardReveal 0.7s ease forwards;
   position: relative;
   overflow: hidden;
@@ -550,9 +550,22 @@ html, body {
   left: -20%;
   width: 140%;
   height: 120%;
-  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
+}
+
+.login-card::after {
+  content: '✡';
+  position: absolute;
+  top: -18px;
+  right: 28px;
+  font-size: 3.2rem;
+  color: var(--gold);
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
 }
 
 @keyframes cardReveal {
@@ -690,13 +703,14 @@ html, body {
 .btn-primary::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transition: left 0.5s ease;
 }
-.btn-primary:hover::after { opacity: 1; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+.btn-primary:hover::after { left: 160%; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 36px var(--accent-glow); }
 
 .login-toggle {
   text-align: center;
@@ -741,7 +755,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 18px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-gold);
   background: rgba(6,13,31,0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -749,7 +763,7 @@ html, body {
   position: relative;
   z-index: 5;
   transition: background 0.8s ease, border-color 0.8s ease;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.35);
 }
 
 body.night-mode .app-header {
@@ -931,14 +945,28 @@ body.night-mode .app-header {
   color: var(--text-secondary);
   background: rgba(255,255,255,0.03);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
   text-transform: uppercase;
+  opacity: 0;
+  animation: pillIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
 }
+.topic-pill:nth-child(1) { animation-delay: 0.55s; }
+.topic-pill:nth-child(2) { animation-delay: 0.65s; }
+.topic-pill:nth-child(3) { animation-delay: 0.75s; }
+.topic-pill:nth-child(4) { animation-delay: 0.85s; }
+.topic-pill:nth-child(5) { animation-delay: 0.95s; }
+.topic-pill:nth-child(6) { animation-delay: 1.05s; }
+
+@keyframes pillIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .topic-pill:hover {
-  border-color: var(--accent-light);
-  color: var(--text-primary);
-  background: rgba(255,255,255,0.07);
-  transform: translateY(-3px) scale(1.04);
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+  transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 20px var(--accent-glow);
 }
 
@@ -1015,6 +1043,7 @@ body.night-mode .app-header {
 .message.rav .msg-bubble {
   background: var(--bg-message-rav);
   border: 1px solid var(--border);
+  border-left: 2px solid var(--border-gold);
   border-bottom-left-radius: 4px;
   color: var(--text-primary);
   backdrop-filter: blur(12px);
@@ -1153,9 +1182,9 @@ body.night-mode .input-bar {
 }
 .input-row textarea::placeholder { color: var(--text-muted); font-style: italic; }
 .input-row textarea:focus {
-  border-color: var(--accent-light);
+  border-color: var(--gold);
   background: rgba(255,255,255,0.07);
-  box-shadow: 0 0 20px var(--accent-glow);
+  box-shadow: 0 0 24px var(--accent-glow), 0 0 0 1px var(--border-gold);
 }
 
 .btn-send {
@@ -1402,12 +1431,117 @@ body.night-mode .input-bar {
 .scroll-btn.visible { opacity: 1; transform: translateY(0); }
 .scroll-btn:hover { border-color: var(--accent-light); color: var(--text-primary); }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (min-width: 600px) {
-  #app { max-width: 600px; margin: 0 auto; }
-  #login .login-card { padding: 52px 48px; }
+/* ---- Credits display in header ---- */
+.credits-badge {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  cursor: default;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.credits-badge:hover { border-color: var(--border-gold); }
+
+/* ---- Profile section in sidebar ---- */
+.sidebar-profile {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.sidebar-profile-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--shimmer);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  border: 1px solid var(--border-gold);
+}
+.sidebar-profile-info { flex: 1; min-width: 0; }
+.sidebar-profile-name {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sidebar-profile-credits {
+  font-family: var(--font-text);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* ---- Credits modal ---- */
+.credits-modal-content {
+  text-align: center;
+}
+.credits-modal-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+  animation: menorahPulse 2s ease-in-out infinite;
+}
+.credits-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+.credits-modal-text {
+  font-family: var(--font-text);
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+.btn-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  margin-bottom: 10px;
+}
+.btn-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.45);
+}
+.credits-renewal {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 12px;
+  opacity: 0.8;
 }
 
 /* Quiz level buttons */
@@ -1466,7 +1600,7 @@ body.night-mode .input-bar {
   <div class="login-card">
     <div class="login-logo">
       <span class="logo-he">רַב הָאוֹר</span>
-      <span class="logo-pt">RavHaOhr · Versão 1.0.5</span>
+      <span class="logo-pt">RavHaOhr · Versão 2.0.1</span>
     </div>
     <h2 class="login-title">Bem-vindo à Luz da Torá</h2>
     <p class="login-subtitle">Entre para dialogar com o RavHaOhr e aprofundar seu conhecimento sagrado</p>
@@ -1521,20 +1655,7 @@ body.night-mode .input-bar {
       </div>
     </div>
 
-    <div class="login-sep" style="margin-top:20px;">
-      <span></span>
-      <em>ou</em>
-      <span></span>
-    </div>
-
-    <button class="btn-google" onclick="loginAsGuest()" style="opacity:0.75;margin-bottom:4px;">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-      </svg>
-      Continuar como Convidado
-    </button>
-
-    <div class="login-version">RavHaOhr v1.0.5 · Criado por Yisrael Yehuda · 5786</div>
+    <div class="login-version">RavHaOhr v2.0.1 · Criado por Yisrael Yehuda · 5786</div>
     <div style="text-align:center;margin-top:10px;">
       <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
          style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
@@ -1557,12 +1678,20 @@ body.night-mode .input-bar {
       <img class="sidebar-logo-img" src="data:image/jpeg;base64,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" alt="RavHaOhr" />
       <div class="sidebar-logo-text">
         <span class="sl-he">רַב הָאוֹר</span>
-        <span class="sl-pt">RavHaOhr · v1.0.5</span>
+        <span class="sl-pt">RavHaOhr · v2.0.1</span>
       </div>
     </div>
     <button class="btn-new-chat" onclick="newChatFromSidebar()">
       ✦ &nbsp;Nova Conversa
     </button>
+  </div>
+
+  <div class="sidebar-profile">
+    <div class="sidebar-profile-avatar">👤</div>
+    <div class="sidebar-profile-info">
+      <div class="sidebar-profile-name" id="profile-name">—</div>
+      <div class="sidebar-profile-credits" id="credits-display">⏳ Carregando...</div>
+    </div>
   </div>
 
   <div class="theme-switcher">
@@ -1735,6 +1864,24 @@ body.night-mode .input-bar {
   </div>
 
   <div class="drawer-section">
+    <div class="drawer-title">Suporte</div>
+    <a class="drawer-item" href="https://wa.me/15416934855" target="_blank" rel="noopener">
+      <span class="di-icon">💬</span>
+      <div class="di-text">
+        <strong>Suporte & Créditos</strong>
+        Falar com o suporte Rav Ohr
+      </div>
+    </a>
+    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.0.1">
+      <span class="di-icon">⚠️</span>
+      <div class="di-text">
+        <strong>Reportar Problema</strong>
+        orhatorabrasil@gmail.com
+      </div>
+    </a>
+  </div>
+
+  <div class="drawer-section">
     <div class="drawer-title">Criador & Contato</div>
     <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com">
       <span class="di-icon">✉</span>
@@ -1787,7 +1934,7 @@ body.night-mode .input-bar {
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
     <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v1.0.5 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
+      RavHaOhr v2.0.1 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
     </p>
   </div>
 </div>
@@ -1829,6 +1976,30 @@ body.night-mode .input-bar {
         style="background:linear-gradient(135deg,#c0392b,#e74c3c);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(192,57,43,0.4);">
         Excluir Conta
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CREDITS EXHAUSTED MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="credits-modal">
+  <div class="modal-card" style="max-width:380px;">
+    <div class="credits-modal-content">
+      <div class="credits-modal-icon">⚡</div>
+      <div class="credits-modal-title">Seus créditos acabaram</div>
+      <p class="credits-modal-text">
+        Você utilizou todos os seus créditos gratuitos de hoje.<br><br>
+        <strong style="color:var(--gold);">Os sábios ensinam:</strong> cada pergunta à Torá é um degrau de ascensão espiritual. Continue sua jornada — seus créditos renovam a meia-noite.<br><br>
+        Para receber créditos adicionais ou conhecer o plano Premium, entre em contato com o suporte.
+      </p>
+      <a href="https://wa.me/15416934855" target="_blank" rel="noopener" class="btn-whatsapp">
+        💬 Falar com o Suporte Rav Ohr
+      </a>
+      <p class="credits-renewal">🌙 Renovação diária automática à meia-noite</p>
+    </div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn cancel" onclick="closeCreditsModal()" style="width:100%;">Fechar</button>
     </div>
   </div>
 </div>
@@ -1894,6 +2065,8 @@ let currentUser = null;
 let isTyping = false;
 let conversationHistory = [];
 let typingInterval = null;
+let lastMessageTime = 0;
+const COOLDOWN_MS = 5000; // 5 segundos entre mensagens
 
 // ─── THEME SYSTEM ─────────────────────────────
 let currentTheme = localStorage.getItem('rav-theme') || 'auto';
@@ -2153,22 +2326,30 @@ window.loginWithEmail   = () => console.warn('Firebase ainda carregando...');
 window.registerWithEmail= () => console.warn('Firebase ainda carregando...');
 window.logout           = () => console.warn('Firebase ainda carregando...');
 
-function onUserLoggedIn(user) {
+function onUserLoggedIn(user, userData) {
   currentUser = user;
-  const name = user.displayName || user.email.split('@')[0];
+  const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Estudioso');
   document.getElementById('login').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   const wb = document.querySelector('.wb-greeting');
   if (wb) {
     wb.innerHTML = `Shalom, <strong>${name}</strong>.<br>Que a luz da Torá ilumine cada palavra que trocarmos.<br>Estou aqui para guiá-lo com sabedoria, amor e verdade.`;
   }
-  // Mostra email no header se quiser
-  const clockEl = document.getElementById('live-clock');
-  // (clock continua normalmente)
+  // Atualiza perfil no sidebar
+  const profileName  = document.getElementById('profile-name');
+  const profileEmail = document.getElementById('profile-email');
+  if (profileName)  profileName.textContent  = name;
+  if (profileEmail) profileEmail.textContent = user.email || '';
+
+  if (userData) {
+    window._userData = userData;
+    if (typeof window.updateCreditsUI === 'function') window.updateCreditsUI(userData);
+  }
 }
 
 function onUserLoggedOut() {
   currentUser = null;
+  window._userData = null;
   conversationHistory = [];
   document.getElementById('app').classList.add('hidden');
   document.getElementById('login').classList.remove('hidden');
@@ -2179,11 +2360,6 @@ function toggleRegister() {
   const rf = document.getElementById('register-form');
   lf.classList.toggle('hidden');
   rf.classList.toggle('hidden');
-}
-
-function loginAsGuest() {
-  const guestUser = { displayName: 'Convidado', email: null, isGuest: true };
-  onUserLoggedIn(guestUser);
 }
 
 // ─── DRAWER ────────────────────────────────────
@@ -2239,6 +2415,33 @@ async function sendMessage() {
   const text  = input.value.trim();
   if (!text || isTyping) return;
 
+  // Verifica cooldown
+  const now = Date.now();
+  if (now - lastMessageTime < COOLDOWN_MS) {
+    const remaining = Math.ceil((COOLDOWN_MS - (now - lastMessageTime)) / 1000);
+    const hint = document.querySelector('.input-hint');
+    if (hint) {
+      const orig = hint.innerHTML;
+      hint.innerHTML = `<span style="color:var(--gold);font-family:var(--font-display);font-size:0.75rem;">⏳ Aguarde ${remaining}s antes de enviar outra mensagem...</span>`;
+      setTimeout(() => { hint.innerHTML = orig; }, COOLDOWN_MS);
+    }
+    return;
+  }
+
+  // Verifica créditos
+  if (window._userData && window._userData.credits <= 0 && window._userData.role !== 'admin') {
+    showCreditsModal();
+    return;
+  }
+
+  // Consome 1 crédito
+  if (window.consumeCredit) {
+    const ok = await window.consumeCredit();
+    if (!ok) { showCreditsModal(); return; }
+  }
+
+  lastMessageTime = Date.now();
+
   const wb = document.getElementById('welcome-banner');
   if (wb) wb.style.display = 'none';
 
@@ -2258,7 +2461,7 @@ async function sendMessage() {
       body: JSON.stringify({
         message: text,
         conversationId: "",
-        user: "user"
+        user: currentUser ? currentUser.uid : "user"
       })
     });
 
@@ -2352,6 +2555,15 @@ function scrollToBottom() {
   if (ca) ca.scrollTop = ca.scrollHeight;
 }
 
+// ─── CREDITS MODAL ────────────────────────────
+function showCreditsModal() {
+  document.getElementById('credits-modal').classList.add('open');
+}
+
+function closeCreditsModal() {
+  document.getElementById('credits-modal').classList.remove('open');
+}
+
 // ─── QUIZ ─────────────────────────────────────
 function openQuizModal() {
   document.getElementById('quiz-modal').classList.add('open');
@@ -2440,11 +2652,15 @@ async function confirmDeleteAccount() {
     onAuthStateChanged,
     signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ─────────────────────────────────────────────────────────────────
-  // ✏️  SUBSTITUA os valores abaixo pelos do seu projeto no Firebase Console
-  //     Firebase Console → Configurações do projeto → Seus apps → Config SDK
-  // ─────────────────────────────────────────────────────────────────
   const firebaseConfig = {
     apiKey:            "AIzaSyCbFI4xgkHCw8eY8JRcpOrokOyBpxzDhk0",
     authDomain:        "ravhaohr.firebaseapp.com",
@@ -2457,15 +2673,109 @@ async function confirmDeleteAccount() {
 
   const app      = initializeApp(firebaseConfig);
   const auth     = getAuth(app);
+  const db       = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  // ── Observador de estado — detecta login/logout automaticamente ──
-  onAuthStateChanged(auth, (user) => {
+  // ── CREDITS SYSTEM ────────────────────────────────────────────────
+  const CREDITS_BY_ROLE = { admin: Infinity, vip: 100, premium: 20, user: 5 };
+
+  async function loadOrCreateUserDoc(user) {
+    const ref  = doc(db, 'users', user.uid);
+    const snap = await getDoc(ref);
+    const today = new Date().toISOString().split('T')[0];
+
+    if (!snap.exists()) {
+      // Primeiro acesso — cria documento
+      await setDoc(ref, {
+        displayName: user.displayName || '',
+        email:       user.email || '',
+        role:        'user',
+        premium:     false,
+        credits:     5,
+        lastReset:   today,
+        createdAt:   serverTimestamp()
+      });
+      return { role: 'user', premium: false, credits: 5, lastReset: today };
+    }
+
+    let data = snap.data();
+
+    // Reset diário de créditos
+    if (data.lastReset !== today) {
+      const maxCredits = CREDITS_BY_ROLE[data.role] || 5;
+      const newCredits = maxCredits === Infinity ? 999999 : maxCredits;
+      await updateDoc(ref, { credits: newCredits, lastReset: today });
+      data = { ...data, credits: newCredits, lastReset: today };
+    }
+
+    return data;
+  }
+
+  function updateCreditsUI(userData) {
+    const el = document.getElementById('credits-display');
+    if (!el) return;
+    const role = userData.role || 'user';
+    if (role === 'admin') {
+      el.innerHTML = '👑 <strong>Admin</strong> — Acesso ilimitado';
+      el.style.color = 'var(--gold)';
+    } else if (role === 'vip') {
+      el.innerHTML = `💎 <strong>VIP</strong> — ⚡ ${userData.credits} créditos hoje`;
+      el.style.color = '#a78bfa';
+    } else if (userData.premium || role === 'premium') {
+      el.innerHTML = `💎 <strong>Premium Ativo</strong> — ⚡ ${userData.credits} créditos hoje`;
+      el.style.color = '#e2c06a';
+    } else {
+      el.innerHTML = `⚡ <strong>${userData.credits}</strong> crédito${userData.credits !== 1 ? 's' : ''} gratuito${userData.credits !== 1 ? 's' : ''} hoje`;
+      el.style.color = userData.credits <= 1 ? '#f87171' : 'var(--text-secondary)';
+    }
+
+    // Bloqueia/desbloqueia input
+    const sendBtn = document.getElementById('send-btn');
+    const input   = document.getElementById('msg-input');
+    const blocked = userData.credits <= 0 && role !== 'admin';
+
+    if (sendBtn) sendBtn.disabled = blocked;
+    if (input)   input.disabled   = blocked;
+
+    if (blocked) {
+      const hint = document.querySelector('.input-hint');
+      if (hint) {
+        hint.innerHTML = `<span style="color:#f87171;font-family:var(--font-display);font-size:0.78rem;letter-spacing:0.08em;">⚡ Seus créditos gratuitos acabaram hoje.</span>`;
+      }
+      showCreditsModal();
+    }
+  }
+
+  // Expõe userData globalmente para sendMessage usar
+  window._userData = null;
+
+  async function consumeCredit() {
+    if (!window._userData || !currentUser) return true;
+    const role = window._userData.role || 'user';
+    if (role === 'admin') return true;
+    if (window._userData.credits <= 0) return false;
+
+    const ref = doc(db, 'users', currentUser.uid);
+    const newCredits = window._userData.credits - 1;
+    await updateDoc(ref, { credits: newCredits });
+    window._userData.credits = newCredits;
+    updateCreditsUI(window._userData);
+    return true;
+  }
+
+  window.consumeCredit   = consumeCredit;
+  window.updateCreditsUI = updateCreditsUI;
+
+  // ── Observador de estado ──────────────────────────────────────────
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       console.log("✅ Logado:", user.email);
-      window.onUserLoggedIn(user);
+      const userData = await loadOrCreateUserDoc(user);
+      window._userData = userData;
+      window.onUserLoggedIn(user, userData);
     } else {
       console.log("🔒 Deslogado");
+      window._userData = null;
       window.onUserLoggedOut();
     }
   });
@@ -2474,7 +2784,6 @@ async function confirmDeleteAccount() {
   window.loginWithGoogle = async () => {
     try {
       await signInWithPopup(auth, provider);
-      // onAuthStateChanged cuida do resto
     } catch (e) {
       console.error(e);
       if (e.code !== 'auth/popup-closed-by-user') {
@@ -2493,9 +2802,9 @@ async function confirmDeleteAccount() {
     } catch (e) {
       console.error(e);
       const msgs = {
-        'auth/user-not-found':  'E-mail não encontrado.',
-        'auth/wrong-password':  'Senha incorreta.',
-        'auth/invalid-email':   'E-mail inválido.',
+        'auth/user-not-found':     'E-mail não encontrado.',
+        'auth/wrong-password':     'Senha incorreta.',
+        'auth/invalid-email':      'E-mail inválido.',
         'auth/invalid-credential': 'Credenciais inválidas. Verifique e-mail e senha.'
       };
       alert(msgs[e.code] || 'Erro no login: ' + e.message);
@@ -2512,8 +2821,8 @@ async function confirmDeleteAccount() {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       await updateProfile(cred.user, { displayName: name });
-      // Força atualização do displayName no onAuthStateChanged
-      window.onUserLoggedIn({ ...cred.user, displayName: name });
+      // onAuthStateChanged vai disparar automaticamente e carregar o Firestore
+      // Não chamamos onUserLoggedIn aqui para evitar corrida — o observer cuida disso
     } catch (e) {
       console.error(e);
       const msgs = {
