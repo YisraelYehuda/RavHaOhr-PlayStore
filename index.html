@@ -100,29 +100,6 @@ body.theme-black {
   --shimmer: linear-gradient(135deg, #c9a84c 0%, #8a6a1a 50%, #e2c06a 100%);
 }
 
-/* Theme: Jerusalém — pedra creme + ouro quente */
-body.theme-jerusalem {
-  --bg-primary: #1a1208;
-  --bg-secondary: #231a0a;
-  --bg-card: #2e2210;
-  --bg-sidebar: #161008;
-  --bg-message-user: #3a2a10;
-  --bg-message-rav: rgba(40,28,8,0.85);
-  --accent: #c8882a;
-  --accent-light: #e6a840;
-  --accent-glow: rgba(200,136,42,0.38);
-  --gold: #f0c050;
-  --gold-light: #f8d878;
-  --gold-dim: rgba(240,192,80,0.18);
-  --text-primary: #f8edcc;
-  --text-secondary: #c8a870;
-  --text-muted: #7a6038;
-  --border: rgba(200,136,42,0.22);
-  --border-gold: rgba(240,192,80,0.35);
-  --star-color: rgba(240,192,80,0.55);
-  --shimmer: linear-gradient(135deg, #c8882a 0%, #8a5510 50%, #e6a840 100%);
-}
-
 /* Theme: Safira — azul profundo + prata */
 body.theme-sapphire {
   --bg-primary: #05080f;
@@ -1815,7 +1792,7 @@ body.night-mode .input-bar {
   <div class="login-card">
     <div class="login-logo">
       <span class="logo-he">רַב הָאוֹר</span>
-      <span class="logo-pt">RavHaOhr · Versão 2.0.3</span>
+      <span class="logo-pt">RavHaOhr · Versão 2.0.5</span>
     </div>
     <h2 class="login-title">Bem-vindo à Luz da Torá</h2>
     <p class="login-subtitle">Entre para dialogar com o RavHaOhr e aprofundar seu conhecimento sagrado</p>
@@ -1870,7 +1847,7 @@ body.night-mode .input-bar {
       </div>
     </div>
 
-    <div class="login-version">RavHaOhr v2.0.3 · Criado por Yisrael Yehuda · 5786</div>
+    <div class="login-version">RavHaOhr v2.0.5 · Criado por Yisrael Yehuda · 5786</div>
     <div style="text-align:center;margin-top:10px;">
       <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
          style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
@@ -1893,7 +1870,7 @@ body.night-mode .input-bar {
       <img class="sidebar-logo-img" src="data:image/jpeg;base64,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" alt="RavHaOhr" />
       <div class="sidebar-logo-text">
         <span class="sl-he">רַב הָאוֹר</span>
-        <span class="sl-pt">RavHaOhr · v2.0.3</span>
+        <span class="sl-pt">RavHaOhr · v2.0.5</span>
       </div>
     </div>
     <button class="btn-new-chat" onclick="newChatFromSidebar()">
@@ -1923,9 +1900,6 @@ body.night-mode .input-bar {
       </button>
       <button class="theme-btn" id="tb-blue" onclick="setTheme('light-blue')">
         <span class="tb-dot" style="background:#eef4ff;border-color:#1a50c0;"></span>Azul
-      </button>
-      <button class="theme-btn" id="tb-jerusalem" onclick="setTheme('jerusalem')">
-        <span class="tb-dot" style="background:#1a1208;border-color:#f0c050;"></span>Jerusalém
       </button>
       <button class="theme-btn" id="tb-sapphire" onclick="setTheme('sapphire')">
         <span class="tb-dot" style="background:#05080f;border-color:#4a7fe8;"></span>Safira
@@ -2115,7 +2089,7 @@ body.night-mode .input-bar {
         Falar com o suporte Rav Ohr
       </div>
     </a>
-    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.0.3">
+    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.0.5">
       <span class="di-icon">⚠️</span>
       <div class="di-text">
         <strong>Reportar Problema</strong>
@@ -2177,7 +2151,7 @@ body.night-mode .input-bar {
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
     <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v2.0.3 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
+      RavHaOhr v2.0.5 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
     </p>
   </div>
 </div>
@@ -2344,7 +2318,7 @@ function setTheme(theme) {
   localStorage.setItem('rav-theme', theme);
   applyTheme();
   // Update active button
-  ['auto','black','white','light-blue','jerusalem','sapphire'].forEach(t => {
+  ['auto','black','white','light-blue','sapphire'].forEach(t => {
     const id = t === 'light-blue' ? 'tb-blue' : 'tb-' + t;
     const btn = document.getElementById(id);
     if (btn) btn.classList.toggle('active', t === theme);
@@ -2354,7 +2328,7 @@ function setTheme(theme) {
 function applyTheme() {
   const body = document.body;
   // Remove all theme classes
-  body.classList.remove('night-mode','theme-white','theme-black','theme-light-blue','theme-jerusalem','theme-sapphire');
+  body.classList.remove('night-mode','theme-white','theme-black','theme-light-blue','theme-sapphire');
 
   if (currentTheme === 'auto') {
     const h = new Date().getHours();
@@ -2566,7 +2540,12 @@ function convItemHTML(c) {
   setTimeout(() => {
     clearInterval(quoteTimer);
     clearInterval(stateTimer);
-    showLogin();
+    window._splashDone = true;
+    if (window._pendingUser) {
+      skipSplashIfLoggedIn();
+    } else {
+      showLogin();
+    }
   }, SPLASH_DURATION);
 })();
 
@@ -2575,6 +2554,23 @@ function showLogin() {
   const login  = document.getElementById('login');
   splash.classList.add('hidden');
   login.classList.remove('hidden');
+}
+
+// Permite que o Firebase interrompa o splash se usuário já estiver logado
+window._splashDone = false;
+window._pendingUser = null;
+window._pendingUserData = null;
+
+function skipSplashIfLoggedIn() {
+  if (window._pendingUser) {
+    const splash = document.getElementById('splash');
+    if (splash && !splash.classList.contains('hidden')) {
+      splash.classList.add('hidden');
+    }
+    onUserLoggedIn(window._pendingUser, window._pendingUserData);
+    window._pendingUser = null;
+    window._pendingUserData = null;
+  }
 }
 
 // ─── LIVE CLOCK ───────────────────────────────
@@ -2598,8 +2594,14 @@ window.logout           = () => console.warn('Firebase ainda carregando...');
 function onUserLoggedIn(user, userData) {
   currentUser = user;
   const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Estudioso');
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
+
+  // Garante que splash e login somem — independente do estado
+  const splash = document.getElementById('splash');
+  const login  = document.getElementById('login');
+  const app    = document.getElementById('app');
+  if (splash) splash.classList.add('hidden');
+  if (login)  login.classList.add('hidden');
+  if (app)    app.classList.remove('hidden');
   const wb = document.querySelector('.wb-greeting');
   if (wb) {
     wb.innerHTML = `Shalom, <strong>${name}</strong>.<br>Que a luz da Torá ilumine cada palavra que trocarmos.<br>Estou aqui para guiá-lo com sabedoria, amor e verdade.`;
@@ -2620,8 +2622,14 @@ function onUserLoggedOut() {
   currentUser = null;
   window._userData = null;
   conversationHistory = [];
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('login').classList.remove('hidden');
+  activeConvId = null;
+
+  const splash = document.getElementById('splash');
+  const login  = document.getElementById('login');
+  const app    = document.getElementById('app');
+  if (splash) splash.classList.add('hidden');
+  if (app)    app.classList.add('hidden');
+  if (login)  login.classList.remove('hidden');
 }
 
 function toggleRegister() {
@@ -2847,7 +2855,7 @@ async function sendMessage() {
       body: JSON.stringify({
         message: text,
         conversationId: "",
-        user: currentUser ? currentUser.uid : "user"
+        user: "user"
       })
     });
 
@@ -3172,10 +3180,24 @@ async function confirmDeleteAccount() {
       console.log("✅ Logado:", user.email);
       const userData = await loadOrCreateUserDoc(user);
       window._userData = userData;
-      window.onUserLoggedIn(user, userData);
+
+      const splash = document.getElementById('splash');
+      const splashVisible = splash && !splash.classList.contains('hidden');
+
+      if (splashVisible) {
+        // Splash ainda na tela — guarda e deixa o splash decidir
+        window._pendingUser     = user;
+        window._pendingUserData = userData;
+        if (window._splashDone) skipSplashIfLoggedIn();
+      } else {
+        // Volta do background ou já passou o splash
+        window.onUserLoggedIn(user, userData);
+      }
     } else {
       console.log("🔒 Deslogado");
-      window._userData = null;
+      window._userData        = null;
+      window._pendingUser     = null;
+      window._pendingUserData = null;
       window.onUserLoggedOut();
     }
   });
