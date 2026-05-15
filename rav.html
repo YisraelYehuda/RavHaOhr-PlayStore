@@ -1427,23 +1427,52 @@ body.night-mode .input-bar {
 /* ============================================================
    FAVORITES SYSTEM
    ============================================================ */
-.msg-fav-btn {
+/* ── Message action buttons (copy + favorite) ───────────── */
+.msg-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   position: absolute;
-  top: 8px; right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
+  top: 8px;
+  right: 8px;
   opacity: 0;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  padding: 2px 4px;
-  border-radius: 6px;
-  line-height: 1;
-  color: var(--text-muted);
+  transition: opacity 0.18s ease;
 }
-.message:hover .msg-fav-btn { opacity: 1; }
-.msg-fav-btn.saved { opacity: 1; color: var(--gold); }
-.msg-fav-btn:active { transform: scale(1.3); }
+.message:hover .msg-actions { opacity: 1; }
+
+.msg-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.07);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.18s, color 0.18s, transform 0.15s;
+  backdrop-filter: blur(6px);
+}
+.msg-action-btn:hover {
+  background: rgba(255,255,255,0.13);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+.msg-action-btn.fav-btn.saved {
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+.msg-action-btn.fav-btn.saved:hover { color: var(--gold); }
+.msg-action-btn.copy-btn.copied {
+  color: #4ade80;
+  background: rgba(74,222,128,0.12);
+}
+/* keep actions visible on touch devices */
+@media (hover: none) {
+  .msg-actions { opacity: 1; }
+}
 
 /* Favorites modal */
 .fav-modal-header {
@@ -1792,7 +1821,7 @@ body.night-mode .input-bar {
   <div class="login-card">
     <div class="login-logo">
       <span class="logo-he">רַב הָאוֹר</span>
-      <span class="logo-pt">RavHaOhr · Versão 2.0.5</span>
+      <span class="logo-pt">RavHaOhr · Versão 2.1.0</span>
     </div>
     <h2 class="login-title">Bem-vindo à Luz da Torá</h2>
     <p class="login-subtitle">Entre para dialogar com o RavHaOhr e aprofundar seu conhecimento sagrado</p>
@@ -1847,7 +1876,7 @@ body.night-mode .input-bar {
       </div>
     </div>
 
-    <div class="login-version">RavHaOhr v2.0.5 · Criado por Yisrael Yehuda · 5786</div>
+    <div class="login-version">RavHaOhr v2.1.0 · Criado por Yisrael Yehuda · 5786</div>
     <div style="text-align:center;margin-top:10px;">
       <a href="https://politica-rav-ohr.orhatorabrasil.workers.dev/" target="_blank" rel="noopener"
          style="font-family:var(--font-display);font-size:0.62rem;letter-spacing:0.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;border-bottom:1px dotted var(--text-muted);opacity:0.7;transition:opacity 0.2s;"
@@ -1870,7 +1899,7 @@ body.night-mode .input-bar {
       <img class="sidebar-logo-img" src="data:image/jpeg;base64,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" alt="RavHaOhr" />
       <div class="sidebar-logo-text">
         <span class="sl-he">רַב הָאוֹר</span>
-        <span class="sl-pt">RavHaOhr · v2.0.5</span>
+        <span class="sl-pt">RavHaOhr · v2.1.0</span>
       </div>
     </div>
     <button class="btn-new-chat" onclick="newChatFromSidebar()">
@@ -2089,7 +2118,7 @@ body.night-mode .input-bar {
         Falar com o suporte Rav Ohr
       </div>
     </a>
-    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.0.5">
+    <a class="drawer-item" href="mailto:orhatorabrasil@gmail.com?subject=Reportar Problema - RavHaOhr v2.1.0">
       <span class="di-icon">⚠️</span>
       <div class="di-text">
         <strong>Reportar Problema</strong>
@@ -2151,7 +2180,7 @@ body.night-mode .input-bar {
   <div class="drawer-section">
     <div class="drawer-title">Versão</div>
     <p style="font-family:var(--font-display);font-size:0.72rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">
-      RavHaOhr v2.0.5 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
+      RavHaOhr v2.1.0 &nbsp;·&nbsp; 5786 &nbsp;·&nbsp; Em desenvolvimento ativo
     </p>
   </div>
 </div>
@@ -2639,6 +2668,40 @@ function toggleRegister() {
   rf.classList.toggle('hidden');
 }
 
+// ─── COPY MESSAGE ─────────────────────────────
+function copyMessage(msgId) {
+  const msgEl = document.querySelector(`.message[data-msg-id="${msgId}"]`);
+  if (!msgEl) return;
+  const text = msgEl.dataset.content || '';
+  const btn  = document.querySelector(`.copy-btn[data-id="${msgId}"]`);
+
+  const doFeedback = () => {
+    if (!btn) return;
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+      btn.classList.remove('copied');
+    }, 2000);
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(doFeedback).catch(() => fallbackCopy(text, doFeedback));
+  } else {
+    fallbackCopy(text, doFeedback);
+  }
+}
+
+function fallbackCopy(text, callback) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); callback(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
 // ─── FAVORITES SYSTEM ────────────────────────
 const FAV_KEY = 'rav-favorites';
 
@@ -2653,7 +2716,7 @@ function saveFavorites(favs) {
 function toggleFavorite(msgId, content) {
   let favs = getFavorites();
   const idx = favs.findIndex(f => f.id === msgId);
-  const btn = document.querySelector(`.msg-fav-btn[data-id="${msgId}"]`);
+  const btn = document.querySelector(`.fav-btn[data-id="${msgId}"]`);
   if (idx >= 0) {
     favs.splice(idx, 1);
     if (btn) { btn.textContent = '☆'; btn.classList.remove('saved'); btn.title = 'Salvar ensinamento'; }
@@ -2700,7 +2763,7 @@ function deleteFavorite(id) {
   const el = document.getElementById('fav-item-' + id);
   if (el) { el.style.opacity = '0'; el.style.transform = 'scale(0.9)'; el.style.transition = '0.2s'; setTimeout(() => el.remove(), 200); }
   // sync star in chat if visible
-  const btn = document.querySelector(`.msg-fav-btn[data-id="${id}"]`);
+  const btn = document.querySelector(`.fav-btn[data-id="${id}"]`);
   if (btn) { btn.textContent = '☆'; btn.classList.remove('saved'); }
 }
 
@@ -2888,6 +2951,7 @@ function appendMessage(role, content) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
   div.dataset.msgId = msgId;
+  div.setAttribute('data-msg-id', msgId);
 
   const ravImg = '<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD4FtraS5chBwOSfSrf2BVIG3d7hs/yq/oFtNLEWijRxn5gzbeOnFd/e+F9Mu4rOTSNPvLV/s6NKJZFk+Y9TxjHbjtXBiMwhQmoS6/gd1DAzqwc4nn9n4c1DUNQg07StHvNRvpxvS2to2diucZwOeoNdDrfwu8W+GSieKfBmtaG8y77Z7uB1im4JKh+gbAJxnnB6V7RZatB4A+KOhWun6LfxS6TZxjUDar5s80uNzBxjAO3kKef6/RXiH4p2PjC4tNDvtJ1ieCNYxdDU9OEMLW8+zYxboxKPnrw3HBFeTVzusnFwp3jJXv/AF8vXyPQhlMHFty1V7/11Pzhk01BvVRhkOCAc4rPmhaF9p5HY171rnw2vLTxDrOk2ekyiWCaSGE3AALBSeCAcBuBzkjvXj/iDT5LKQpPsWUH5lVgcflXqYPM6OKdoPU4MTl9WhFSktCbwr5ZuHNzf/ZII1Llwu89QMKp6k56V6I/xHbSdGmj8M6bBFPjY97qCpJMRjI2IAFRs5IPzfpXkdq4EDRnA3kLuIzjnNXrkTxsYJgwDoNp6gkdOe9Ovl1HE1Oasrrt0/4Pz0CljqtGny03bzPdvAPiWK9s9Y1S5fVpNSktWt2exuVimuGlRUw0jAheckvgkcj+LNfTWm6ZqZ+Gl1ZfEJb4X2kWEc7qJo5rW8HllVkjMKqF2hQDHz8yBs5Jr5V+BPibTdE1R7eZoIpXCuzN1kVVbMfPQNgc9jjFfVlr460O0/Z21JJmiuPMtXi+6AE6qAoHQZ69wTz1r5zNLUa0YKGl1Z/JHr4Oc6lFvm/q7ueEeI/H/hfxFNrFhrlg9heJcuItQtis0ToQCu9Vxk4zll/LNfPPjJIYJ3hhlhlX5XV4TlWB5BBxVfUb+R9XuBC5VZpt5wOCPUjucVT10zgQpMuAIgF4xkAnGfwxXrZblEMBO9N6Pp/l/lscGMx7xMLSW3UoWj7VAUAtu6EZFX5onnljS2gLydSiDAJ9h9PSseKVon3Ka0LfVXgkLgvlvvYOD+Yr3H5HlJrqXLG+k0m6kfY6ybSFDqRj8+3J/HFdHB8QtSXwi2irJIYTIXA3HHJz+fb/APVW/wCCfjYfCP2K2/sixu7dW8y6NxbJKZmJ+YncDnC/KB0HJxkmu81n43/BzU7bFx8MtAuZZCWlkXSI4So9FI53nqD93jkc5HjYyvWVTklh+dd0/wBGv1PTw1GDhzRrKL7PQ8A08S3eqLPgM0bbyMjHXJqbxXK0l0glSNXAABjwQw9cj+RrrvEnjDwG9ldL4V0y602dXxAINwhdN2eVd2ZMqem44K8Ehvl8zubl7mXc3CjO1c5C16FG9Rqo1bye5yVWoJ007n//2Q==" style="width:100%;height:100%;object-fit:cover;display:block;" />';
   const avatarText = role === 'rav' ? ravImg : '👤';
@@ -2896,9 +2960,15 @@ function appendMessage(role, content) {
   // Check if already favorited
   const favs = getFavorites();
   const isFaved = favs.some(f => f.content === content);
-  const favBtnHtml = role === 'rav'
-    ? `<button class="msg-fav-btn${isFaved ? ' saved' : ''}" data-id="${msgId}" onclick="toggleFavorite('${msgId}', this.closest('.message').dataset.content)" title="${isFaved ? 'Remover dos favoritos' : 'Salvar ensinamento'}">${isFaved ? '★' : '☆'}</button>`
-    : '';
+  const actionsHtml = role === 'rav' ? `
+    <div class="msg-actions">
+      <button class="msg-action-btn copy-btn" data-id="${msgId}" onclick="copyMessage('${msgId}')" title="Copiar mensagem">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button class="msg-action-btn fav-btn${isFaved ? ' saved' : ''}" data-id="${msgId}" onclick="toggleFavorite('${msgId}', this.closest('.message').dataset.content)" title="${isFaved ? 'Remover dos favoritos' : 'Salvar ensinamento'}">
+        ${isFaved ? '★' : '☆'}
+      </button>
+    </div>` : '';
 
   div.dataset.content = content;
   div.innerHTML = `
@@ -2906,7 +2976,7 @@ function appendMessage(role, content) {
     <div class="msg-bubble" style="position:relative;">
       <div class="msg-meta">${metaText}</div>
       ${content.replace(/\n/g, '<br>')}
-      ${favBtnHtml}
+      ${actionsHtml}
     </div>
   `;
   chatArea.appendChild(div);
